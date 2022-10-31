@@ -4,18 +4,17 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 
 /**
- * The root structure for defining how an asset should be onboarded by the validation oracle smart contract.
+ * The root structure for defining how a validation should be onboarded by the validation oracle smart contract.
  *
- * @param assetType A unique name that defines the type of scopes that pertain to this definition.
- * @param displayName A pretty human-readable name for this asset type (vs a typically snake_case asset_type name).
- * @param verifiers All different asset verifiers' information for this specific asset type.
- * @param enabled Whether or not this asset type is allowed for onboarding.  Default in the contract is `true`.
+ * @param validationType A unique name that defines the type of validation that will be performed by a validator.
+ * @param displayName A pretty human-readable name for this validation type (vs a typically snake_case validation_type name).
+ * @param validators All different validations' information for this specific validation type.
+ * @param enabled Whether or not this validation type will accept incoming onboard requests.  If left null, the default value used will be `true`.  This parameter can only be changed by the contract owner.
  */
 @JsonNaming(SnakeCaseStrategy::class)
 data class ValidationDefinition(
     val validationType: String,
-    val assetType: String,
     val displayName: String?,
-    val validators: List<ValidatorValidationConfiguration>,
+    val validators: List<ValidatorConfiguration>,
     val enabled: Boolean,
 )

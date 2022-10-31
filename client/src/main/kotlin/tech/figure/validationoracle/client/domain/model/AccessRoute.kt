@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 
 /**
- * Defines a route by which to access asset data.
+ * Defines a route by which to access validation data.
  *
  * @param route The route to use (defined by the creator, and understood by the consumer).
  * @param name A free-form name the define the purpose of the route.

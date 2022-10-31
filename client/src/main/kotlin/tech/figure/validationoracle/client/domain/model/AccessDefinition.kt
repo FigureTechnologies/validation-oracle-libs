@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
  * Defines access routes for a specific entity in the validation oracle smart contract.
  *
  * @param ownerAddress The bech32 address that exposed these access routes.
- * @param accessRoutes A collection of routes that have exposed asset data.
+ * @param accessRoutes A collection of routes that have exposed validation data.
  * @param definitionType Specifies the type of entity that exposed these routes.
  */
 @JsonNaming(SnakeCaseStrategy::class)
@@ -25,7 +25,7 @@ enum class AccessDefinitionType {
     // The REQUESTOR is the address that onboarded a specific scope
     @JsonProperty("requestor")
     REQUESTOR,
-    // The VERIFIER is the address that the requestor specified for asset verification
-    @JsonProperty("verifier")
-    VERIFIER,
+    // The VERIFIER is the address that the requestor specified for this validation
+    @JsonProperty("validator")
+    VALIDATOR,
 }

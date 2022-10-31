@@ -14,8 +14,8 @@ import tech.figure.validationoracle.client.domain.execute.AddValidationDefinitio
  * This serializer outputs the values in the following format:
  * ```json
  * {
- *      "add_asset_definition": {
- *          "asset_definition": {
+ *      "add_validaiton_definition": {
+ *          "validaiton_definition": {
  *              ...
  *          }
  *      }
@@ -27,19 +27,17 @@ class AddValidationDefinitionExecuteSerializer : JsonSerializer<AddValidationDef
         // Root node
         gen.writeStartObject()
         // Start add_asset_definition node
-        gen.writeObjectFieldStart("add_asset_definition")
+        gen.writeObjectFieldStart("add_validation_definition")
         // Start asset_definition node
-        gen.writeObjectFieldStart("asset_definition")
-        gen.writeStringField("asset_type", value.assetType)
-        gen.writeObjectFieldStart("validation_type")
+        gen.writeObjectFieldStart("validation_definition")
         gen.writeStringField("validation_type", value.validationType)
         value.displayName?.also { displayName -> gen.writeStringField("display_name", displayName) }
-        gen.writeArrayFieldStart("verifiers")
-        value.verifiers.forEach { verifier -> gen.writeObject(verifier) }
+        gen.writeArrayFieldStart("validators")
+        value.validators.forEach { validator -> gen.writeObject(validator) }
         gen.writeEndArray()
         value.enabled?.also { enabled -> gen.writeBooleanField("enabled", enabled) }
         value.bindName?.also { bindName -> gen.writeBooleanField("bind_name", bindName) }
-        // End asset_definition node
+        // End validation_definition node
         gen.writeEndObject()
         // End add_asset_definition node
         gen.writeEndObject()
