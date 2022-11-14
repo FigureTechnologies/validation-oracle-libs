@@ -15,4 +15,4 @@ class DefaultVOClient(
     override val objectMapper: ObjectMapper,
     private val executor: VOExecutor,
     private val querier: VOQuerier,
-) : tech.figure.validationoracle.client.client.base.VOClient, VOExecutor by executor, VOQuerier by querier
+) : VOClient, VOExecutor by executor, VOQuerier by querier

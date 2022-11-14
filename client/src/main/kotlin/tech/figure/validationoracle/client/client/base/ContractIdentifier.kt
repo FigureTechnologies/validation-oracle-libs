@@ -11,19 +11,20 @@ sealed class ContractIdentifier {
     /**
      * A reference to a Provenance Blockchain Name Module value that is bound to a specific contract.
      */
-    class Name(val contractName: String) : tech.figure.validationoracle.client.client.base.ContractIdentifier()
+    class Name(val contractName: String) : ContractIdentifier()
 
     /**
      * A direct reference to the contract's bech32 address.
      */
-    class Address(val contractAddress: String) : tech.figure.validationoracle.client.client.base.ContractIdentifier()
+    class Address(val contractAddress: String) : ContractIdentifier()
 
-    fun resolveAddress(pbClient: PbClient): String = when (this) {
-        is tech.figure.validationoracle.client.client.base.ContractIdentifier.Name ->
-            pbClient
-                .nameClient
-                .resolve(QueryResolveRequest.newBuilder().setName(contractName).build())
-                .address
-        is tech.figure.validationoracle.client.client.base.ContractIdentifier.Address -> contractAddress
-    }
+    fun resolveAddress(pbClient: PbClient): String =
+        when (this) {
+            is Name ->
+                pbClient
+                    .nameClient
+                    .resolve(QueryResolveRequest.newBuilder().setName(contractName).build())
+                    .address
+            is Address -> contractAddress
+        }
 }

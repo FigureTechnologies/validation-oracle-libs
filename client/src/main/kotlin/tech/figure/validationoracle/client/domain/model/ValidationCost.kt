@@ -14,7 +14,7 @@ import java.math.BigInteger
  *
  * @param amount A value without decimal places that indicates how much coin this fee destination receives.
  * @param denom The denomination of coin required for this fee.
- * @param feeDestination Details of entity receiving fee.
+ * @param destination Details of entity receiving fee.
  */
 @JsonNaming(SnakeCaseStrategy::class)
 data class ValidationCost(
@@ -22,5 +22,5 @@ data class ValidationCost(
     @JsonDeserialize(using = CosmWasmUintToBigIntegerDeserializer::class)
     val amount: BigInteger,
     val denom: String,
-    val feeDestination: EntityDetail,
+    val destination: EntityDetail,
 )

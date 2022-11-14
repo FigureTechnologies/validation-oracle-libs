@@ -33,7 +33,7 @@ To establish an [VOClient](client/src/main/kotlin/tech/figure/validationoracle/c
 create a [PbClient](https://github.com/provenance-io/pb-grpc-client-kotlin/blob/main/src/main/kotlin/io/provenance/client/grpc/PbClient.kt). 
 The `PbClient` comes pre-bundled with the client artifact, when imported.  The `PbClient` controls which provenance 
 instance the application is communicating with, and, importantly, the provenance instance to which the Validation
-Oracle smart contract is deployed.  Then, with the `PbClient` instance, create your `ACClient`.
+Oracle smart contract is deployed.  Then, with the `PbClient` instance, create your `VOClient`.
 
 #### Example:
 
@@ -55,9 +55,9 @@ class SampleConfiguration {
       // or GasEstimationMethod.COSMOS_SIMULATION
       gasEstimationMethod = GasEstimationMethod.MSG_FEE_CALCULATION
     )
-    // Then, the ACClient will know where to look for the validation oracle smart contract
+    // Then, the VOClient will know where to look for the validation oracle smart contract
     // The root interfaces are exposed if you want to create your own implementation, but a default implementation can
-    // easily be built simply by using the default function in the companion object of the ACClient interface:
+    // easily be built simply by using the default function in the companion object of the VOClient interface:
     val voClient = VOClient.getDefault(
       // validationoracle.pb for local, or some other contract name. 
       // Alternatively, if the contract's bech32 address is directly known, you can use ContractIdentifier.Address("mycontractaddressbech32")

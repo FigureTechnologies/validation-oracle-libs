@@ -12,12 +12,11 @@ import tech.figure.validationoracle.util.objects.VOObjectMapperUtil
 import java.net.URI
 
 /**
- * ACClient = Validation Oracle Client.
+ * VOClient = Validation Oracle Client.
  * This client defines all the functionality exposed for communicating with the validation oracle smart contract.
  * See comments on the various interfaces for their specific actions or utilities.
  */
-interface VOClient : VOExecutor,
-    VOQuerier {
+interface VOClient : VOExecutor, VOQuerier {
     val pbClient: PbClient
     val objectMapper: ObjectMapper
 
@@ -26,7 +25,7 @@ interface VOClient : VOExecutor,
         private val DEFAULT_OBJECT_MAPPER by lazy { VOObjectMapperUtil.getObjectMapper() }
 
         /**
-         * Standard implementation of an ACClient using a [ContractIdentifier] and [PbClient] for contract communication.
+         * Standard implementation of an VOClient using a [ContractIdentifier] and [PbClient] for contract communication.
          * If standard communication with the contract is desired without extra business logic during communication
          * phases, this function is sufficient to use.
          *
@@ -35,10 +34,10 @@ interface VOClient : VOExecutor,
          * @param objectMapper The Jackson [ObjectMapper] instance used to communicate with the contract.  The default is configured appropriately, but can be overridden here if necessary.
          */
         fun getDefault(
-            contractIdentifier: tech.figure.validationoracle.client.client.base.ContractIdentifier,
+            contractIdentifier: ContractIdentifier,
             pbClient: PbClient,
-            objectMapper: ObjectMapper = tech.figure.validationoracle.client.client.base.VOClient.Companion.DEFAULT_OBJECT_MAPPER,
-        ): tech.figure.validationoracle.client.client.base.VOClient = DefaultVOQuerier(contractIdentifier, objectMapper, pbClient).let { querier ->
+            objectMapper: ObjectMapper = DEFAULT_OBJECT_MAPPER,
+        ): VOClient = DefaultVOQuerier(contractIdentifier, objectMapper, pbClient).let { querier ->
             DefaultVOClient(
                 pbClient = pbClient,
                 objectMapper = objectMapper,
@@ -59,21 +58,21 @@ interface VOClient : VOExecutor,
          * @param channelConfigLambda Any additional GRPC configuration desired for the channel contained within the [PbClient].
          */
         fun getDefault(
-            contractIdentifier: tech.figure.validationoracle.client.client.base.ContractIdentifier,
+            contractIdentifier: ContractIdentifier,
             chainId: String,
             channelUri: URI,
             gasEstimator: PbGasEstimator,
             opts: ChannelOpts = ChannelOpts(),
-            objectMapper: ObjectMapper = tech.figure.validationoracle.client.client.base.VOClient.Companion.DEFAULT_OBJECT_MAPPER,
+            objectMapper: ObjectMapper = DEFAULT_OBJECT_MAPPER,
             channelConfigLambda: (NettyChannelBuilder) -> Unit = { }
-        ): tech.figure.validationoracle.client.client.base.VOClient = PbClient(
+        ): VOClient = PbClient(
             chainId = chainId,
             channelUri = channelUri,
             gasEstimationMethod = gasEstimator,
             opts = opts,
             channelConfigLambda = channelConfigLambda,
         ).let { pbClient ->
-            tech.figure.validationoracle.client.client.base.VOClient.Companion.getDefault(
+            getDefault(
                 contractIdentifier = contractIdentifier,
                 pbClient = pbClient,
                 objectMapper = objectMapper,
