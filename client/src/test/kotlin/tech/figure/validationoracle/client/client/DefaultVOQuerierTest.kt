@@ -75,17 +75,19 @@ class DefaultVOQuerierTest {
     )
 
     fun mockValidator(validationType: String): ValidatorConfiguration = ValidatorConfiguration(
-        validationCosts = listOf(ValidationCost(
-            amount = BigInteger.valueOf(123),
-            denom = "nhash",
-            destination = mockEntityDetail(),
-        )),
+        validationCosts = listOf(
+            ValidationCost(
+                amount = BigInteger.valueOf(123),
+                denom = "nhash",
+                destination = mockEntityDetail(),
+            )
+        ),
         validationType = validationType,
         validator = mockEntityDetail(),
     )
 
     fun mockValidationRequestOrder(id: String = TEST_REQUET_ID): ValidationRequestOrder = ValidationRequestOrder(
-         id = id
+        id = id
     )
 
     private data class MockSuite(

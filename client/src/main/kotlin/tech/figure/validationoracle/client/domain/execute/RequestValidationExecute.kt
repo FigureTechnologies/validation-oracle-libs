@@ -3,7 +3,6 @@ package tech.figure.validationoracle.client.domain.execute
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import cosmos.base.v1beta1.CoinOuterClass
 import tech.figure.validationoracle.client.domain.execute.base.ContractExecute
-import tech.figure.validationoracle.client.domain.model.ValidatorConfiguration
 import tech.figure.validationoracle.client.domain.serialization.RequestValidationExecuteSerializer
 
 /**
