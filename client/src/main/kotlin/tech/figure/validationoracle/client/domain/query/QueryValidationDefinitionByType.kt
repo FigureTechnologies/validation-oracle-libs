@@ -8,13 +8,13 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 import tech.figure.validationoracle.client.domain.query.base.ContractQuery
 
 /**
- * This class is a reflection of the request body used in the validation oracle smart contract's query asset
- * definition route.  It is internally utilized in the [ACQuerier][tech.figure.validationoracle.client.client.base.VOQuerier].
+ * This class is a reflection of the request body used in the validation oracle smart contract's query validation
+ * definition route.  It is internally utilized in the [VOQuerier][tech.figure.validationoracle.client.client.base.VOQuerier].
  */
 @JsonNaming(SnakeCaseStrategy::class)
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonTypeName("query_validation_definition")
-data class QueryValidationDefinition(val assetType: String, val validationType: String) : ContractQuery {
+@JsonTypeName("query_validation_definition_by_type")
+data class QueryValidationDefinitionByType(val type: String) : ContractQuery {
     @JsonIgnore
-    override val queryFailureMessage: String = "Query asset definition: $assetType and $validationType"
+    override val queryFailureMessage: String = "Query validation definition: $type"
 }

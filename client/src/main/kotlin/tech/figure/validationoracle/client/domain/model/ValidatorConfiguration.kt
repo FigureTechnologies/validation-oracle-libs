@@ -1,11 +1,7 @@
 package tech.figure.validationoracle.client.domain.model
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import tech.figure.validationoracle.client.domain.serialization.CosmWasmBigIntegerToUintSerializer
-import tech.figure.validationoracle.client.domain.serialization.CosmWasmUintToBigIntegerDeserializer
 
 /**
  * A configuration for a verifier's interactions with the validation oracle smart 11contract.
@@ -17,8 +13,6 @@ import tech.figure.validationoracle.client.domain.serialization.CosmWasmUintToBi
  */
 @JsonNaming(SnakeCaseStrategy::class)
 data class ValidatorConfiguration(
-    @JsonSerialize(using = CosmWasmBigIntegerToUintSerializer::class)
-    @JsonDeserialize(using = CosmWasmUintToBigIntegerDeserializer::class)
     val validationCosts: List<ValidationCost> = emptyList(),
     val validationType: String,
     val validator: EntityDetail,

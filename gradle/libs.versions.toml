@@ -1,6 +1,4 @@
 [versions]
-assetModel = "0.1.2"
-assetSpec = "1.0.0"
 bouncyCastle = "1.70"
 feign = "11.8"
 grpc = "1.47.0"
@@ -23,8 +21,6 @@ scarlet = "0.1.12"
 testContainers = "1.17.2"
 
 [libraries]
-assetModel = { module = "io.provenance.model:metadata-asset-model", version.ref = "assetModel" }
-assetSpecs = { module = "tech.figure.spec:asset-specs", version.ref = "assetSpec" }
 bouncyCastleBcProv = { module = "org.bouncycastle:bcprov-jdk15on", version.ref = "bouncyCastle" }
 coroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
 coroutinesCoreJvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "kotlinCoroutines" }
