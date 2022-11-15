@@ -71,12 +71,8 @@ class DefaultVOExecutor(
         signer: Signer,
         options: tech.figure.validationoracle.client.client.base.BroadcastOptions,
     ): BroadcastTxResponse {
-        println("JOE1")
         val signerAddress = signer.address()
-        println("JOE2")
         val account = options.baseAccount ?: pbClient.authClient.getBaseAccount(signerAddress)
-        println("JOE3")
-        println("msg.toAny().toTxBody(): ${msg.toAny().toTxBody()}")
         return pbClient.estimateAndBroadcastTx(
             txBody = msg.toAny().toTxBody(),
             signers = BaseReqSigner(
