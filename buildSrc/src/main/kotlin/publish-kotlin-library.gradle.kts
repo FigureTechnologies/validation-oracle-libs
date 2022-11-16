@@ -84,5 +84,10 @@ subprojects {
                 }
             }
         }
+        if (!System.getenv("DISABLE_SIGNING").toBoolean()) {
+            configure<SigningExtension> {
+                sign(publications["maven"])
+            }
+        }
     }
 }
