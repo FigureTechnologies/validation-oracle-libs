@@ -50,11 +50,15 @@ autolabeler:
   - label: 'dependencies'
     title:
       - '/update/i'
+exclude-contributors:
+  - 'figure-renovate'
 replacers:
   - search: '/\[sc-(\d+)\]/gi'
     replace: '[[sc-$1](https://app.shortcut.com/figure/story/$1)]'
   - search: '/\[ch(\d+)\]/gi'
     replace: '[[sc-$1](https://app.shortcut.com/figure/story/$1)]'
+  - search: '/@figure-renovate$/gim'
+    replace: 'by [Renovate](https://github.com/renovatebot/renovate)'
 template: |
   # Changelog
   $CHANGES
