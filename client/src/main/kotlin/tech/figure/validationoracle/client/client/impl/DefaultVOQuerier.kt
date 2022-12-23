@@ -27,16 +27,16 @@ class DefaultVOQuerier(
 
     override fun queryContractAddress(): String = cachedContractAddress
 
-    override fun queryValidationDefinitionByType(queryValidationDefinitionByType: QueryValidationDefinitionByType): ValidationDefinition? = doQueryOrNull(
-        query = queryValidationDefinitionByType
+    override fun queryValidationDefinitionByType(query: QueryValidationDefinitionByType): ValidationDefinition? = doQueryOrNull(
+        query = query
     )
 
-    override fun queryValidationRequestById(queryValidationRequestOrder: QueryValidationRequestById): ValidationRequestOrder? = doQueryOrNull(
-        query = queryValidationRequestOrder
+    override fun queryValidationRequestById(query: QueryValidationRequestById): ValidationRequestOrder? = doQueryOrNull(
+        query = query
     )
 
     /**
-     * Executes a provided [ContractQuery] against the validation oracle smart contract.  This relies on the
+     * Executes a provided [ContractQuery] against the validation oracle smart contract. This relies on the
      * internalized [PbClient] to do the heavy lifting.
      */
     private inline fun <reified T : ContractQuery, reified U : Any> doQuery(

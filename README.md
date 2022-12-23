@@ -1,5 +1,5 @@
 # Validation Oracle Libs
-This project contains libraries for communicating with the [validation oracle smart contract](https://github.com/FigureTechnologies/validation-oracle-smart-contract)
+This project contains libraries for communicating with the [validation oracle (VO) smart contract](https://github.com/FigureTechnologies/validation-oracle-smart-contract)
 
 ## Status
 [![Latest Release][release-badge]][release-latest]
@@ -18,11 +18,9 @@ This project contains libraries for communicating with the [validation oracle sm
 
 ## Compatibility
 
-The following client/verifier versions should be used with the validation oracle smart contract:
-
-| Client / Verifier | AC Smart Contract |
-|-------------------|-------------------|
-| v1.0.0            | v1.0.0            |
+| [Kotlin Client](https://github.com/FigureTechnologies/validation-oracle-libs/releases) | [VO Smart Contract](https://github.com/FigureTechnologies/validation-oracle-smart-contract/releases) |
+|----------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| TBA                                                                                    | TBA                                                                                                  |
 
 ## Importing the Client and/or Verifier
 - The [client](client) library can be downloaded via: `tech.figure.validationoracle:vo-client:<latest-release-version>`
@@ -64,7 +62,7 @@ class SampleConfiguration {
       contractIdentifier = ContractIdentifier.Name("mycontractname"),
       pbClient = pbClient,
       // This is the default and can be omitted, but it exists for if you'd like to provide your own Jackson ObjectMapper instance
-      objectMapper = ACObjectMapperUtil.OBJECT_MAPPER,
+      objectMapper = VOObjectMapperUtil.OBJECT_MAPPER,
     )
   }
 }
