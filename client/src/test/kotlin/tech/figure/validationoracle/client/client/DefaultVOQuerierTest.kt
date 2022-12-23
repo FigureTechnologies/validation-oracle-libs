@@ -16,6 +16,7 @@ import tech.figure.validationoracle.client.domain.model.EntityDetail
 import tech.figure.validationoracle.client.domain.model.ValidationCost
 import tech.figure.validationoracle.client.domain.model.ValidationDefinition
 import tech.figure.validationoracle.client.domain.model.ValidationRequestOrder
+import tech.figure.validationoracle.client.domain.model.ValidationRequestStatus
 import tech.figure.validationoracle.client.domain.model.ValidatorConfiguration
 import tech.figure.validationoracle.client.domain.query.QueryValidationDefinitionByType
 import tech.figure.validationoracle.client.domain.query.QueryValidationRequestById
@@ -31,7 +32,9 @@ class DefaultVOQuerierTest {
     companion object {
         val TEST_VALIDATION_TYPE = "MyValType"
         val TEST_VALIDATOR_DISPLAY_NAME = "data"
-        val TEST_REQUET_ID = "12345"
+        val TEST_REQUEST_ID = "12345"
+        val TEST_REQUEST_OWNER = "someOwnerAddress"
+        val TEST_TARGET_SCOPE = "someScopeAddress"
     }
 
     @Test
@@ -52,17 +55,14 @@ class DefaultVOQuerierTest {
         assertNull(suite.querier.queryValidationRequestById(QueryValidationRequestById("TestIdNotFound")))
         suite.mockQueryReturns(mockValidationRequestOrder())
         val validationRequestOrderFromQuery = assertSucceeds("Expected the query to execute successfully when the proper response is returned") {
-            suite.querier.queryValidationRequestById(QueryValidationRequestById(TEST_REQUET_ID))
+            suite.querier.queryValidationRequestById(QueryValidationRequestById(TEST_REQUEST_ID))
         }
-        assertEquals(TEST_REQUET_ID, validationRequestOrderFromQuery?.id)
+        assertEquals(TEST_REQUEST_ID, validationRequestOrderFromQuery?.id)
     }
 
     fun mockVODefinition(validationType: String = TEST_VALIDATION_TYPE): ValidationDefinition = ValidationDefinition(
         validationType = validationType,
         displayName = TEST_VALIDATOR_DISPLAY_NAME,
-        validators = listOf(
-            mockValidator("Validator1")
-        ),
         enabled = true,
     )
 
@@ -86,8 +86,12 @@ class DefaultVOQuerierTest {
         validator = mockEntityDetail(),
     )
 
-    fun mockValidationRequestOrder(id: String = TEST_REQUET_ID): ValidationRequestOrder = ValidationRequestOrder(
-        id = id
+    fun mockValidationRequestOrder(id: String = TEST_REQUEST_ID): ValidationRequestOrder = ValidationRequestOrder(
+        id = id,
+        owner = TEST_REQUEST_OWNER,
+        scopes = listOf(TEST_TARGET_SCOPE),
+        quote = listOf(),
+        status = ValidationRequestStatus.PENDING
     )
 
     private data class MockSuite(

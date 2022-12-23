@@ -20,7 +20,7 @@ import java.math.BigInteger
 data class ValidationCost(
     @JsonSerialize(using = CosmWasmBigIntegerToUintSerializer::class)
     @JsonDeserialize(using = CosmWasmUintToBigIntegerDeserializer::class)
-    val amount: BigInteger,
+    val amount: BigInteger, // TODO: Change to Cosmos Coin type, verify that it has serialization implemented
     val denom: String,
     val destination: EntityDetail,
 )

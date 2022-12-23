@@ -2,8 +2,7 @@ package tech.figure.validationoracle.client.domain.execute
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import tech.figure.validationoracle.client.domain.execute.base.ContractExecute
-import tech.figure.validationoracle.client.domain.model.ValidatorConfiguration
-import tech.figure.validationoracle.client.domain.serialization.AddValidationDefinitionExecuteSerializer
+import tech.figure.validationoracle.client.domain.serialization.ExecuteCreateValidationDefinitionSerializer
 
 /**
  * This class is a reflection of the request body used in the validation oracle smart contract's add validation
@@ -11,7 +10,7 @@ import tech.figure.validationoracle.client.domain.serialization.AddValidationDef
  *
  * To use it, simply create the execute class and call the appropriate function:
  * ```kotlin
- * val execute = AddValidationDefinitionExecute(validationType, displayName, validators, enabled = true)
+ * val execute = CreateValidationDefinition(validationType, displayName, validators, enabled = true)
  * val txResponse = VOClient.addValidationDefinition(execute, signer, options)
  * ```
  *
@@ -21,11 +20,10 @@ import tech.figure.validationoracle.client.domain.serialization.AddValidationDef
  * @param enabled Whether or not this validation type will accept incoming onboard requests.  If left null, the default value used will be `true`.  This parameter can only be changed by the contract owner once initialized.
  * @param bindName Whether or not to bind the name value creating an validation definition.
  */
-@JsonSerialize(using = AddValidationDefinitionExecuteSerializer::class)
-data class AddValidationDefinitionExecute(
+@JsonSerialize(using = ExecuteCreateValidationDefinitionSerializer::class)
+data class CreateValidationDefinition(
     val validationType: String,
     val displayName: String? = null,
-    val validators: List<ValidatorConfiguration> = emptyList(),
     val enabled: Boolean? = null,
     val bindName: Boolean? = null,
 ) : ContractExecute

@@ -10,15 +10,17 @@ import io.provenance.client.grpc.Signer
 import io.provenance.client.protobuf.extensions.getBaseAccount
 import io.provenance.client.protobuf.extensions.toAny
 import io.provenance.client.protobuf.extensions.toTxBody
+import tech.figure.validationoracle.client.client.base.BroadcastOptions
 import tech.figure.validationoracle.client.client.base.VOExecutor
 import tech.figure.validationoracle.client.client.base.VOQuerier
-import tech.figure.validationoracle.client.domain.execute.AddValidationDefinitionExecute
-import tech.figure.validationoracle.client.domain.execute.RequestValidationExecute
+import tech.figure.validationoracle.client.domain.execute.CreateValidationDefinition
+import tech.figure.validationoracle.client.domain.execute.RequestValidation
 import tech.figure.validationoracle.client.domain.execute.base.ContractExecute
 
 /**
- * The default implementation of an [VOExecutor].  Provides all the standard functionality to use an [VOClient][tech.figure.validationoracle.client.client.base.VOClient] if an
- * override for business logic is not necessary.
+ * The default implementation of an [VOExecutor].  Provides all the standard functionality to use a
+ * [VOClient][tech.figure.validationoracle.client.client.base.VOClient]
+ * if an override for business logic is not necessary.
  */
 class DefaultVOExecutor(
     private val objectMapper: ObjectMapper,
@@ -26,25 +28,25 @@ class DefaultVOExecutor(
     private val querier: VOQuerier,
 ) : VOExecutor {
     private fun generateAddValidationDefinitionMsg(
-        execute: AddValidationDefinitionExecute,
+        execute: CreateValidationDefinition,
         signerAddress: String,
     ): MsgExecuteContract = generateMsg(execute, signerAddress)
 
     override fun addValidationDefinition(
-        execute: AddValidationDefinitionExecute,
+        execute: CreateValidationDefinition,
         signer: Signer,
-        options: tech.figure.validationoracle.client.client.base.BroadcastOptions,
+        options: BroadcastOptions,
     ): BroadcastTxResponse = doExecute(generateAddValidationDefinitionMsg(execute, signer.address()), signer, options)
 
     private fun generateAddValidationDefinitionMsg(
-        execute: RequestValidationExecute,
+        execute: RequestValidation,
         signerAddress: String,
     ): MsgExecuteContract = generateMsg(execute, signerAddress)
 
     override fun requestValidationExecute(
-        execute: RequestValidationExecute,
+        execute: RequestValidation,
         signer: Signer,
-        options: tech.figure.validationoracle.client.client.base.BroadcastOptions,
+        options: BroadcastOptions,
     ): BroadcastTxResponse = doExecute(generateAddValidationDefinitionMsg(execute, signer.address()), signer, options)
 
     /**
@@ -63,13 +65,13 @@ class DefaultVOExecutor(
     }.build()
 
     /**
-     * Executes a provided [MsgExecuteContract] with the provided signer information and broadcast mode.  This relies
+     * Executes a provided [MsgExecuteContract] with the provided signer information and broadcast mode. This relies
      * on the internalized [PbClient] to do the heavy lifting.
      */
     private fun doExecute(
         msg: MsgExecuteContract,
         signer: Signer,
-        options: tech.figure.validationoracle.client.client.base.BroadcastOptions,
+        options: BroadcastOptions,
     ): BroadcastTxResponse {
         val signerAddress = signer.address()
         val account = options.baseAccount ?: pbClient.authClient.getBaseAccount(signerAddress)
@@ -83,7 +85,10 @@ class DefaultVOExecutor(
             mode = options.broadcastMode,
         ).also { response ->
             if (response.txResponse.code != 0) {
-                throw IllegalStateException("Validation oracle contract execution failed with message:${System.lineSeparator()}${response.txResponse.rawLog}")
+                throw IllegalStateException(
+                    "Validation oracle contract execution failed with message:" +
+                        "${System.lineSeparator()}${response.txResponse.rawLog}"
+                )
             }
         }
     }

@@ -17,12 +17,12 @@ interface VOQuerier {
     fun queryContractAddress(): String
 
     /**
-     * Retrieves a single validation definition by type currently stored in the smart contract.
+     * Retrieves a single validation definition currently stored in the smart contract by its type.
      */
-    fun queryValidationDefinitionByType(queryValidationDefinitionByType: QueryValidationDefinitionByType): ValidationDefinition?
+    fun queryValidationDefinitionByType(query: QueryValidationDefinitionByType): ValidationDefinition?
 
     /**
-     * Retrieves all validation request order instances currently available for this smart contract.
+     * Retrieves a single validation request order currently stored in the smart contract by its ID.
      */
-    fun queryValidationRequestById(queryValidationRequestOrder: QueryValidationRequestById): ValidationRequestOrder?
+    fun queryValidationRequestById(query: QueryValidationRequestById): ValidationRequestOrder?
 }
