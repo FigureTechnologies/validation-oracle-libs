@@ -18,8 +18,6 @@ import tech.figure.validationoracle.client.domain.model.ValidationDefinition
 import tech.figure.validationoracle.client.domain.model.ValidationRequestOrder
 import tech.figure.validationoracle.client.domain.model.ValidationRequestStatus
 import tech.figure.validationoracle.client.domain.model.ValidatorConfiguration
-import tech.figure.validationoracle.client.domain.query.ValidationDefinitionTypeQuery
-import tech.figure.validationoracle.client.domain.query.ValidationRequestIdQuery
 import tech.figure.validationoracle.client.helper.OBJECT_MAPPER
 import tech.figure.validationoracle.client.helper.assertSucceeds
 import tech.figure.validationoracle.client.helper.toJsonPayload
@@ -42,7 +40,7 @@ class DefaultVOQuerierTest {
         val suite = MockSuite.new()
         suite.mockQueryReturns(mockVODefinition())
         val validationDefinitionFromQuery = assertSucceeds("Expected the query to execute successfully when the proper response is returned") {
-            suite.querier.queryValidationDefinitionByType(ValidationDefinitionTypeQuery(TEST_VALIDATION_TYPE))
+            suite.querier.queryValidationDefinitionByType(TEST_VALIDATION_TYPE)
         }
         assertEquals(TEST_VALIDATOR_DISPLAY_NAME, validationDefinitionFromQuery?.displayName)
         assertEquals(TEST_VALIDATION_TYPE, validationDefinitionFromQuery?.validationType)
@@ -52,10 +50,10 @@ class DefaultVOQuerierTest {
     fun `test queryValidationRequestById`() {
         val suite = MockSuite.new()
         suite.mockQueryNullResponse()
-        assertNull(suite.querier.queryValidationRequestById(ValidationRequestIdQuery("TestIdNotFound")))
+        assertNull(suite.querier.queryValidationRequestById("TestIdNotFound"))
         suite.mockQueryReturns(mockValidationRequestOrder())
         val validationRequestOrderFromQuery = assertSucceeds("Expected the query to execute successfully when the proper response is returned") {
-            suite.querier.queryValidationRequestById(ValidationRequestIdQuery(TEST_REQUEST_ID))
+            suite.querier.queryValidationRequestById(TEST_REQUEST_ID)
         }
         assertEquals(TEST_REQUEST_ID, validationRequestOrderFromQuery?.id)
     }

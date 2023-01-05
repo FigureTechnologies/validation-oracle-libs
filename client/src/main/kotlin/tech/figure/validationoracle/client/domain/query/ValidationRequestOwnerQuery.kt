@@ -9,13 +9,13 @@ import tech.figure.validationoracle.client.domain.query.base.ContractQueryInput
 
 /**
  * This class is a reflection of the request body used in the validation oracle smart contract's query validation
- * definition route.
+ * request route.
  * It is internally utilized in the [VOQuerier][tech.figure.validationoracle.client.client.base.VOQuerier].
  */
 @JsonNaming(SnakeCaseStrategy::class)
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
-@JsonTypeName("query_validation_definition_by_type")
-data class ValidationDefinitionTypeQuery(val type: String) : ContractQueryInput {
+@JsonTypeName("query_validation_request_by_owner")
+data class ValidationRequestOwnerQuery(val owner: String) : ContractQueryInput {
     @JsonIgnore
-    override val queryDescription: String = "query for validation definition of type $type"
+    override val queryDescription: String = "Query for validation requests owned by address $owner"
 }

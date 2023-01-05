@@ -7,10 +7,14 @@ import io.provenance.client.grpc.PbClient
 import io.provenance.client.protobuf.extensions.queryWasm
 import tech.figure.validationoracle.client.client.base.VOQuerier
 import tech.figure.validationoracle.client.domain.NullContractResponseException
+import tech.figure.validationoracle.client.domain.model.ContractInfo
 import tech.figure.validationoracle.client.domain.model.ValidationDefinition
 import tech.figure.validationoracle.client.domain.model.ValidationRequestOrder
+import tech.figure.validationoracle.client.domain.query.ContractInfoQuery
 import tech.figure.validationoracle.client.domain.query.ValidationDefinitionTypeQuery
 import tech.figure.validationoracle.client.domain.query.ValidationRequestIdQuery
+import tech.figure.validationoracle.client.domain.query.ValidationRequestOwnerQuery
+import tech.figure.validationoracle.client.domain.query.ValidationRequestValidatorQuery
 import tech.figure.validationoracle.client.domain.query.base.ContractQueryInput
 
 /**
@@ -28,13 +32,26 @@ class DefaultVOQuerier(
 
     override fun queryContractAddress(): String = cachedContractAddress
 
-    override fun queryValidationDefinitionByType(query: ValidationDefinitionTypeQuery): ValidationDefinition? = doQueryOrNull(
-        query = query
+    override fun queryContractInfo(): ContractInfo? = doQueryOrNull(
+        query = ContractInfoQuery
     )
 
-    override fun queryValidationRequestById(query: ValidationRequestIdQuery): ValidationRequestOrder? = doQueryOrNull(
-        query = query
+    override fun queryValidationDefinitionByType(validationType: String): ValidationDefinition? = doQueryOrNull(
+        query = ValidationDefinitionTypeQuery(type = validationType)
     )
+
+    override fun queryValidationRequestById(id: String): ValidationRequestOrder? = doQueryOrNull(
+        query = ValidationRequestIdQuery(id = id)
+    )
+
+    override fun queryValidationRequestsByOwner(ownerAddress: String): List<ValidationRequestOrder>? = doQueryOrNull(
+        query = ValidationRequestOwnerQuery(owner = ownerAddress)
+    )
+
+    override fun queryValidationRequestsByValidator(validatorAddress: String): List<ValidationRequestOrder>? =
+        doQueryOrNull(
+            query = ValidationRequestValidatorQuery(validator = validatorAddress)
+        )
 
     /**
      * Executes a provided [ContractQueryInput] against the validation oracle smart contract. This relies on the
