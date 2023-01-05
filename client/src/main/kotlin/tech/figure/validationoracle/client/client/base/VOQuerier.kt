@@ -1,9 +1,8 @@
 package tech.figure.validationoracle.client.client.base
 
+import tech.figure.validationoracle.client.domain.model.ContractInfo
 import tech.figure.validationoracle.client.domain.model.ValidationDefinition
 import tech.figure.validationoracle.client.domain.model.ValidationRequestOrder
-import tech.figure.validationoracle.client.domain.query.ValidationDefinitionTypeQuery
-import tech.figure.validationoracle.client.domain.query.ValidationRequestIdQuery
 
 /**
  * VOQuerier = Validation Oracle Querier
@@ -17,12 +16,29 @@ interface VOQuerier {
     fun queryContractAddress(): String
 
     /**
+     * Retrieves validation request orders currently stored in the smart contract which a given validator is or was
+     * allowed to validate.
+     */
+    fun queryContractInfo(): ContractInfo? // TODO: Needs to be nullable?
+
+    /**
      * Retrieves a single validation definition currently stored in the smart contract by its type.
      */
-    fun queryValidationDefinitionByType(query: ValidationDefinitionTypeQuery): ValidationDefinition?
+    fun queryValidationDefinitionByType(validationType: String): ValidationDefinition?
 
     /**
      * Retrieves a single validation request order currently stored in the smart contract by its ID.
      */
-    fun queryValidationRequestById(query: ValidationRequestIdQuery): ValidationRequestOrder?
+    fun queryValidationRequestById(id: String): ValidationRequestOrder?
+
+    /**
+     * Retrieves validation request orders currently stored in the smart contract owned by the given address.
+     */
+    fun queryValidationRequestsByOwner(ownerAddress: String): List<ValidationRequestOrder>? // TODO: Needs to be nullable?
+
+    /**
+     * Retrieves validation request orders currently stored in the smart contract which a given validator is or was
+     * allowed to validate.
+     */
+    fun queryValidationRequestsByValidator(validatorAddress: String): List<ValidationRequestOrder>? // TODO: Needs to be nullable?
 }

@@ -1,5 +1,5 @@
 # Validation Oracle Libs
-This project contains libraries for communicating with the [validation oracle (VO) smart contract](https://github.com/FigureTechnologies/validation-oracle-smart-contract)
+This project contains libraries for communicating with the [validation oracle (VO) smart contract](https://github.com/FigureTechnologies/validation-oracle-smart-contract).
 
 ## Status
 [![stability-badge][stability-alpha]][stability-info]

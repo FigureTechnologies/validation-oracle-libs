@@ -9,12 +9,13 @@ import tech.figure.validationoracle.client.domain.query.base.ContractQueryInput
 
 /**
  * This class is a reflection of the request body used in the validation oracle smart contract's query validation
- * definition route.  It is internally utilized in the [VOQuerier][tech.figure.validationoracle.client.client.base.VOQuerier].
+ * request route.
+ * It is internally utilized in the [VOQuerier][tech.figure.validationoracle.client.client.base.VOQuerier].
  */
 @JsonNaming(SnakeCaseStrategy::class)
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("query_validation_request_by_id")
 data class ValidationRequestIdQuery(val id: String) : ContractQueryInput {
     @JsonIgnore
-    override val queryDescription: String = "Query for validation request with ID $id"
+    override val queryDescription: String = "query for validation request with ID $id"
 }

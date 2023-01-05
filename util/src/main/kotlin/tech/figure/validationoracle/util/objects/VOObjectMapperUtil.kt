@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.hubspot.jackson.datatype.protobuf.ProtobufModule
 
-object VOObjectMapperUtil {
+object VOObjectMapperUtil { // TODO: Verify if this gets published
     fun getObjectMapper(): ObjectMapper = ObjectMapper()
         .registerKotlinModule()
         .registerModule(com.fasterxml.jackson.datatype.jsr310.JavaTimeModule())
