@@ -9,13 +9,14 @@ import tech.figure.validationoracle.client.client.base.VOQuerier
 import tech.figure.validationoracle.client.domain.NullContractResponseException
 import tech.figure.validationoracle.client.domain.model.ValidationDefinition
 import tech.figure.validationoracle.client.domain.model.ValidationRequestOrder
-import tech.figure.validationoracle.client.domain.query.QueryValidationDefinitionByType
-import tech.figure.validationoracle.client.domain.query.QueryValidationRequestById
-import tech.figure.validationoracle.client.domain.query.base.ContractQuery
+import tech.figure.validationoracle.client.domain.query.ValidationDefinitionTypeQuery
+import tech.figure.validationoracle.client.domain.query.ValidationRequestIdQuery
+import tech.figure.validationoracle.client.domain.query.base.ContractQueryInput
 
 /**
- * The default override of an [VOQuerier].  Provides all the standard functionality to use an [VOClient][tech.figure.validationoracle.client.client.base.VOClient] if an override for
- * business logic is not necessary.
+ * The default override of an [VOQuerier]. Provides all the standard functionality to use a
+ * [VOClient][tech.figure.validationoracle.client.client.base.VOClient]
+ * if an override for business logic is not necessary.
  */
 class DefaultVOQuerier(
     private val contractIdentifier: tech.figure.validationoracle.client.client.base.ContractIdentifier,
@@ -27,25 +28,27 @@ class DefaultVOQuerier(
 
     override fun queryContractAddress(): String = cachedContractAddress
 
-    override fun queryValidationDefinitionByType(query: QueryValidationDefinitionByType): ValidationDefinition? = doQueryOrNull(
+    override fun queryValidationDefinitionByType(query: ValidationDefinitionTypeQuery): ValidationDefinition? = doQueryOrNull(
         query = query
     )
 
-    override fun queryValidationRequestById(query: QueryValidationRequestById): ValidationRequestOrder? = doQueryOrNull(
+    override fun queryValidationRequestById(query: ValidationRequestIdQuery): ValidationRequestOrder? = doQueryOrNull(
         query = query
     )
 
     /**
-     * Executes a provided [ContractQuery] against the validation oracle smart contract. This relies on the
+     * Executes a provided [ContractQueryInput] against the validation oracle smart contract. This relies on the
      * internalized [PbClient] to do the heavy lifting.
      */
-    private inline fun <reified T : ContractQuery, reified U : Any> doQuery(
+    private inline fun <reified T : ContractQueryInput, reified U : Any> doQuery(
         query: T,
         typeReference: TypeReference<U>? = null,
     ): U = doQueryOrNull(query = query, typeReference = typeReference)
-        ?: throw NullContractResponseException("Received null response from validation oracle smart contract for: ${query.queryFailureMessage}")
+        ?: throw NullContractResponseException(
+            "Received null response from validation oracle smart contract for ${query.queryDescription}"
+        )
 
-    private inline fun <reified T : ContractQuery, reified U : Any> doQueryOrNull(
+    private inline fun <reified T : ContractQueryInput, reified U : Any> doQueryOrNull(
         query: T,
         typeReference: TypeReference<U>? = null,
     ): U? =
@@ -64,10 +67,10 @@ class DefaultVOQuerier(
                 }
             }
     /**
-     * Executes a provided [ContractQuery] against the validation oracle smart contract with additional functionality
-     * designed to return null responses when requested.
+     * Executes a provided [ContractQueryInput] against the validation oracle smart contract with additional
+     * functionality designed to return null responses when requested.
      */
-    private inline fun <reified T : ContractQuery, reified U : Any> doQueryOrNull(
+    private inline fun <reified T : ContractQueryInput, reified U : Any> doQueryOrNull(
         query: T,
         throwExceptions: Boolean,
         typeReference: TypeReference<U>? = null,

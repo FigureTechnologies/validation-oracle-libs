@@ -3,10 +3,10 @@ package tech.figure.validationoracle.client.domain.serialization
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.JsonSerializer
 import com.fasterxml.jackson.databind.SerializerProvider
-import tech.figure.validationoracle.client.domain.execute.CreateValidationDefinition
+import tech.figure.validationoracle.client.domain.execute.ValidationDefinitionCreationRequest
 
 /**
- * The CreateValidationDefinition JSON structure is impossible to represent with vanilla Jackson annotation setups.  This
+ * The JSON structure of a contract entry point is impossible to represent with vanilla Jackson annotation setups. This
  * serializer enables the object to be serialized correctly with its multiple-nested nodes without enabling special
  * ObjectMapper features, allowing the object to be more universally applicable to external ObjectMapper singleton
  * instances.
@@ -22,8 +22,8 @@ import tech.figure.validationoracle.client.domain.execute.CreateValidationDefini
  * }
  * ```
  */
-class ExecuteCreateValidationDefinitionSerializer : JsonSerializer<CreateValidationDefinition>() {
-    override fun serialize(value: CreateValidationDefinition, gen: JsonGenerator, provider: SerializerProvider?) {
+class ValidationDefinitionCreationRequestSerializer : JsonSerializer<ValidationDefinitionCreationRequest>() {
+    override fun serialize(value: ValidationDefinitionCreationRequest, gen: JsonGenerator, provider: SerializerProvider?) {
         gen.writeStartObject() // Start root node
         gen.writeObjectFieldStart("create_validation_definition") // Start create_validation_definition node
         gen.writeObjectFieldStart("request") // Start request node

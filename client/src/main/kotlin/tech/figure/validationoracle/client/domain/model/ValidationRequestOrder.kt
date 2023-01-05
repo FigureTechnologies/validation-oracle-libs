@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 import cosmos.base.v1beta1.CoinOuterClass.Coin
 
 /**
- * The root structure for defining how a validation should be onboarded by the validation oracle smart contract.
+ * The structure used for storing validation requests in the validation oracle smart contract.
  *
  * @param id The ID of the validation request. It must be unique within the contract instance.
  * @param owner The bech32 address of the requestor.

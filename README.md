@@ -2,28 +2,39 @@
 This project contains libraries for communicating with the [validation oracle (VO) smart contract](https://github.com/FigureTechnologies/validation-oracle-smart-contract)
 
 ## Status
+[![stability-badge][stability-alpha]][stability-info]
 [![Latest Release][release-badge]][release-latest]
-[![Maven Central][maven-badge]][maven-url]
 [![Apache 2.0 License][license-badge]][license-url]
+
+[![ci-status][ci-status]][ci-workflow]
 [![LOC][loc-badge]][loc-report]
 
-[license-badge]: https://img.shields.io/github/license/FigureTechnologies/validation-oracle-libs.svg
+### Artifacts
+#### Client
+[![Maven Central][client-maven-badge]][client-maven-url]
+#### Utilities
+[![Maven Central][util-maven-badge]][util-maven-url]
+
+[ci-status]: https://github.com/FigureTechnologies/validation-oracle-libs/actions/workflows/build.yaml/badge.svg?branch=main
+[ci-workflow]: https://github.com/FigureTechnologies/validation-oracle-libs/actions/workflows/build.yaml
+[client-maven-badge]: https://maven-badges.herokuapp.com/maven-central/tech.figure.validationoracle/vo-client/badge.svg?style=for-the-badge
+[client-maven-url]: https://maven-badges.herokuapp.com/maven-central/tech.figure.validationoracle/vo-client
+[license-badge]: https://img.shields.io/github/license/FigureTechnologies/validation-oracle-libs.svg?style=for-the-badge
 [license-url]: https://github.com/FigureTechnologies/validation-oracle-libs/blob/main/LICENSE
-[maven-badge]: https://maven-badges.herokuapp.com/maven-central/tech/figure/validationoracle/vo-client/badge.svg
-[maven-url]: https://maven-badges.herokuapp.com/maven-central/tech/figure/validationoracle/vo-client
-[release-badge]: https://img.shields.io/github/tag/FigureTechnologies/validation-oracle-libs.svg
-[release-latest]: https://github.com/FigureTechnologies/validation-oracle-libs/releases/latest
 [loc-badge]: https://tokei.rs/b1/github/FigureTechnologies/validation-oracle-libs
 [loc-report]: https://github.com/FigureTechnologies/validation-oracle-libs
+[release-badge]: https://img.shields.io/github/tag/FigureTechnologies/validation-oracle-libs.svg?style=for-the-badge
+[release-latest]: https://github.com/FigureTechnologies/validation-oracle-libs/releases/latest
+[stability-alpha]: https://img.shields.io/badge/stability-alpha-f4d03f.svg?style=for-the-badge
+[stability-info]: https://github.com/mkenney/software-guides/blob/master/STABILITY-BADGES.md#alpha
+[util-maven-badge]: https://maven-badges.herokuapp.com/maven-central/tech.figure.validationoracle/vo-util/badge.svg?style=for-the-badge
+[util-maven-url]: https://maven-badges.herokuapp.com/maven-central/tech.figure.validationoracle/vo-util
 
 ## Compatibility
 
 | [Kotlin Client](https://github.com/FigureTechnologies/validation-oracle-libs/releases) | [VO Smart Contract](https://github.com/FigureTechnologies/validation-oracle-smart-contract/releases) |
 |----------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
 | TBA                                                                                    | TBA                                                                                                  |
-
-## Importing the Client and/or Verifier
-- The [client](client) library can be downloaded via: `tech.figure.validationoracle:vo-client:<latest-release-version>`
 
 ## Using the VOClient
 ### Creating an VOClient instance
@@ -46,7 +57,7 @@ class SampleConfiguration {
   fun buildClients() {
     // First, you'll need a PbClient
     val pbClient = PbClient(
-      // chain-local for local, other some provenance instance chain id
+      // chain-local for a local environment, pio-testnet-1 for the test environment
       chainId = "my-chain-id",
       // http://localhost:9090 for local, or some non-local channel uri
       channelUri = URI("my-channel-uri"),

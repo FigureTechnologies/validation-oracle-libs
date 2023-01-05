@@ -10,7 +10,7 @@ import cosmos.tx.v1beta1.ServiceOuterClass.BroadcastMode
  * [estimateAndBroadcastTx][io.provenance.client.grpc.PbClient.estimateAndBroadcastTx].
  * @param sequenceOffset An offset value to add to the sequence number of the account used.
  * Allows for custom sequence tracking.
- * @param baseAccount The account to use for signing the transaction.  Should match the signer provided in the request.
+ * @param baseAccount The account to use for signing the transaction. Should match the signer provided in the request.
  * If none is provided, this value will automatically be looked up with the
  * [AuthClient][io.provenance.client.grpc.PbClient.authClient].
  */
