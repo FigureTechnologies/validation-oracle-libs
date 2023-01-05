@@ -7,7 +7,7 @@ import tech.figure.validationoracle.client.client.base.VOExecutor
 import tech.figure.validationoracle.client.client.base.VOQuerier
 
 /**
- * The default implementation for an [VOClient].  Allows the client to be a composition of its various elements.
+ * The default implementation for an [VOClient]. Allows the client to be a composition of its various elements.
  * Use [VOClient.getDefault] to retrieve an instance of this.
  */
 class DefaultVOClient(

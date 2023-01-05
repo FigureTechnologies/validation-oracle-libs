@@ -74,7 +74,7 @@ interface VOClient : VOExecutor, VOQuerier {
             gasEstimationMethod = gasEstimator,
             opts = opts,
             channelConfigLambda = channelConfigLambda,
-        ).use { pbClient ->
+        ).let { pbClient ->
             getDefault(
                 contractIdentifier = contractIdentifier,
                 pbClient = pbClient,

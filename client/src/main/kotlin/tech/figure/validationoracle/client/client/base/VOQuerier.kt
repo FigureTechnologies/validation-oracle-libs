@@ -2,8 +2,8 @@ package tech.figure.validationoracle.client.client.base
 
 import tech.figure.validationoracle.client.domain.model.ValidationDefinition
 import tech.figure.validationoracle.client.domain.model.ValidationRequestOrder
-import tech.figure.validationoracle.client.domain.query.QueryValidationDefinitionByType
-import tech.figure.validationoracle.client.domain.query.QueryValidationRequestById
+import tech.figure.validationoracle.client.domain.query.ValidationDefinitionTypeQuery
+import tech.figure.validationoracle.client.domain.query.ValidationRequestIdQuery
 
 /**
  * VOQuerier = Validation Oracle Querier
@@ -19,10 +19,10 @@ interface VOQuerier {
     /**
      * Retrieves a single validation definition currently stored in the smart contract by its type.
      */
-    fun queryValidationDefinitionByType(query: QueryValidationDefinitionByType): ValidationDefinition?
+    fun queryValidationDefinitionByType(query: ValidationDefinitionTypeQuery): ValidationDefinition?
 
     /**
      * Retrieves a single validation request order currently stored in the smart contract by its ID.
      */
-    fun queryValidationRequestById(query: QueryValidationRequestById): ValidationRequestOrder?
+    fun queryValidationRequestById(query: ValidationRequestIdQuery): ValidationRequestOrder?
 }

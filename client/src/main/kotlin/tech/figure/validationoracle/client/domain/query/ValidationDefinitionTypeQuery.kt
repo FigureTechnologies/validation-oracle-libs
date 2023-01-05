@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.fasterxml.jackson.annotation.JsonTypeName
 import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import tech.figure.validationoracle.client.domain.query.base.ContractQuery
+import tech.figure.validationoracle.client.domain.query.base.ContractQueryInput
 
 /**
  * This class is a reflection of the request body used in the validation oracle smart contract's query validation
@@ -14,7 +14,7 @@ import tech.figure.validationoracle.client.domain.query.base.ContractQuery
 @JsonNaming(SnakeCaseStrategy::class)
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME)
 @JsonTypeName("query_validation_definition_by_type")
-data class QueryValidationDefinitionByType(val type: String) : ContractQuery {
+data class ValidationDefinitionTypeQuery(val type: String) : ContractQueryInput {
     @JsonIgnore
-    override val queryFailureMessage: String = "Query validation definition: $type"
+    override val queryDescription: String = "Query for validation definition of type $type"
 }
