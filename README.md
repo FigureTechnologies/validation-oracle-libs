@@ -44,7 +44,7 @@ The `PbClient` comes pre-bundled with the client artifact, when imported.  The `
 instance the application is communicating with, and, importantly, the provenance instance to which the Validation
 Oracle smart contract is deployed.  Then, with the `PbClient` instance, create your `VOClient`.
 
-#### Example:
+#### Example
 
 ```kotlin
 import io.provenance.client.grpc.GasEstimationMethod
@@ -77,4 +77,24 @@ class SampleConfiguration {
     )
   }
 }
+```
+## Testing
+This repository includes integration tests which tests the library against a Provenance [Docker](https://www.docker.com/) container that has an instantiated VO smart contract.
+By running the Gradle test task, [Testcontainers](https://www.testcontainers.org/) will automatically set up the necessary containers for the tests.
+The tests will need some time to set up, but can be sped up by allocating more CPU and RAM to the Docker environment.
+### Manual Local Environment
+You can manually stand up the integration test environment using
+```shell
+# From the root of this repository
+docker compose -f client/src/test/resources/docker-compose.yml up -d -V --force-recreate
+```
+This command can be supplemented with certain environment variables to override the environment's defaults, e.g.
+```shell
+# From the root of this repository
+RUST_OPTIMIZER_VERSION=0.12.10 docker compose -f client/src/test/resources/docker-compose.yml up -d
+```
+To shut down and reset the environment, run
+```shell
+# From the root of this repository
+docker compose -f client/src/test/resources/docker-compose.yml down -v
 ```

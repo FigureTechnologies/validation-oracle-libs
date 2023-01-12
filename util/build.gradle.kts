@@ -5,5 +5,8 @@ dependencies {
         libs.bouncyCastleBcProv,
     ).forEach(::api)
 
-    testImplementation(libs.bundles.test)
+    listOf(
+        libs.kotlinTest,
+        libs.mockk,
+    ).forEach(::testImplementation)
 }

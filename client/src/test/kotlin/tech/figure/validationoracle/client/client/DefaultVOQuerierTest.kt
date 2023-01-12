@@ -18,9 +18,9 @@ import tech.figure.validationoracle.client.domain.model.ValidationDefinition
 import tech.figure.validationoracle.client.domain.model.ValidationRequestOrder
 import tech.figure.validationoracle.client.domain.model.ValidationRequestStatus
 import tech.figure.validationoracle.client.domain.model.ValidatorConfiguration
-import tech.figure.validationoracle.client.helper.OBJECT_MAPPER
-import tech.figure.validationoracle.client.helper.assertSucceeds
-import tech.figure.validationoracle.client.helper.toJsonPayload
+import tech.figure.validationoracle.client.test.OBJECT_MAPPER
+import tech.figure.validationoracle.client.test.assertSucceeds
+import tech.figure.validationoracle.client.test.toJsonPayload
 import java.math.BigInteger
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -78,7 +78,7 @@ class DefaultVOQuerierTest {
                 amount = BigInteger.valueOf(123),
                 denom = "nhash",
                 destination = mockEntityDetail(),
-            )
+            ),
         ),
         validationType = validationType,
         validator = mockEntityDetail().address,
@@ -89,7 +89,7 @@ class DefaultVOQuerierTest {
         owner = TEST_REQUEST_OWNER,
         scopes = listOf(TEST_TARGET_SCOPE),
         quote = listOf(),
-        status = ValidationRequestStatus.PENDING
+        status = ValidationRequestStatus.PENDING,
     )
 
     private data class MockSuite(
@@ -103,7 +103,7 @@ class DefaultVOQuerierTest {
             fun new(contractName: String = DEFAULT_CONTRACT_NAME): MockSuite {
                 val pbClient = mockk<PbClient>()
                 every { pbClient.nameClient.resolve(any()) } returns QueryResolveResponse.newBuilder().setAddress(
-                    DEFAULT_CONTRACT_ADDRESS
+                    DEFAULT_CONTRACT_ADDRESS,
                 ).build()
                 return MockSuite(
                     querier = DefaultVOQuerier(

@@ -22,10 +22,11 @@ data class AccessDefinition(
  * Entity types that can specify access routes.
  */
 enum class AccessDefinitionType {
-    // The REQUESTOR is the address that onboarded a specific scope
+    /** The address that onboarded a specific scope. */
     @JsonProperty("requestor")
     REQUESTOR,
-    // The VERIFIER is the address that the requestor specified for this validation
+
+    /** The address that the requestor specified for this validation. */
     @JsonProperty("validator")
     VALIDATOR,
 }

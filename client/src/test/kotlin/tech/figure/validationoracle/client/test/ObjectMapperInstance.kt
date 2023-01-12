@@ -1,4 +1,4 @@
-package tech.figure.validationoracle.client.helper
+package tech.figure.validationoracle.client.test
 
 import tech.figure.validationoracle.util.objects.VOObjectMapperUtil
 

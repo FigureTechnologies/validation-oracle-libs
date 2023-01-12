@@ -4,9 +4,12 @@ feign = "11.8"
 grpc = "1.47.0"
 jackson = "2.13.3"
 jacksonProtobuf = "0.9.12"
+kotest = "5.5.4"
+kotest_extension = "1.1.2"
 kotlin = "1.6.21"
 kotlinCoroutines = "1.6.2"
-kotlinLogging = "2.1.21"
+kotlinLogging = "3.0.4"
+ktlint = "0.48.1"
 logback = "1.2.6"
 mockk = "1.12.4"
 okHttp = "4.9.3"
@@ -18,7 +21,7 @@ provenanceHdWallet = "0.1.15"
 provenanceProto = "1.10.0"
 provenanceScope = "0.6.0"
 scarlet = "0.1.12"
-testContainers = "1.17.2"
+testContainers = "1.17.6"
 
 [libraries]
 bouncyCastleBcProv = { module = "org.bouncycastle:bcprov-jdk15on", version.ref = "bouncyCastle" }
@@ -35,11 +38,17 @@ jacksonDataTypeJdk8 = { module = "com.fasterxml.jackson.datatype:jackson-datatyp
 jacksonDataTypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 jacksonKotlinModule = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 jacksonProtobufModule = { module = "com.hubspot.jackson:jackson-datatype-protobuf", version.ref = "jacksonProtobuf" }
+kotest_assertionsCoreJvm = { module = "io.kotest:kotest-assertions-core-jvm", version.ref = "kotest" }
+kotest_frameworkDatatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
+kotest_junit5RunnerJvm = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
+kotest_propertyJvm = { module = "io.kotest:kotest-property-jvm", version.ref = "kotest" }
+kotest_springExtensions = { module = "io.kotest.extensions:kotest-extensions-spring", version.ref = "kotest_extension" }
 kotlinAllOpen = { module = "org.jetbrains.kotlin:kotlin-allopen", version.ref = "kotlin" }
 kotlinLogging = { module = "io.github.microutils:kotlin-logging-jvm", version.ref = "kotlinLogging" }
 kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlinStdLibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlinTest = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
 logbackClassic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 okHttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okHttp" }
@@ -62,7 +71,6 @@ scarletStreamAdapterCoroutines = { module = "com.tinder.scarlet:stream-adapter-c
 scarletWebSocketOkHttp = { module = "com.tinder.scarlet:websocket-okhttp", version.ref = "scarlet" }
 testContainers = { module = "org.testcontainers:testcontainers", version.ref = "testContainers" }
 testContainersJUnit = { module = "org.testcontainers:junit-jupiter", version.ref = "testContainers" }
-testContainersPostgres = { module = "org.testcontainers:postgresql", version.ref = "testContainers" }
 
 # This doesn't current work in a way that's useful.  Keeping this here for a magical future where it's relevant
 [plugins]
@@ -77,5 +85,11 @@ kotlin = ["kotlinAllOpen", "kotlinReflect", "kotlinStdLibJdk8"]
 protobuf = ["protobufJava", "protobufJavaUtil"]
 provenance = ["provenanceGrpcClient", "provenanceHdWallet", "provenanceProto", "provenanceScopeEncryption", "provenanceScopeUtil"]
 scarlet = ["scarletMessageAdapterMoshi", "scarlet", "scarletStreamAdapterCoroutines", "scarletWebSocketOkHttp"]
-test = ["kotlinTest", "mockk"]
-testContainers = ["testContainers", "testContainersJUnit", "testContainersPostgres"]
+kotest = [
+    "kotest_junit5RunnerJvm",
+    "kotest_assertionsCoreJvm",
+    "kotest_propertyJvm",
+    "kotest_frameworkDatatest",
+    "kotest_springExtensions",
+]
+testContainers = ["testContainers", "testContainersJUnit"]

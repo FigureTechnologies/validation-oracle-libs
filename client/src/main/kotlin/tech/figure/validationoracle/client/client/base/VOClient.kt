@@ -67,7 +67,7 @@ interface VOClient : VOExecutor, VOQuerier {
             gasEstimator: PbGasEstimator,
             opts: ChannelOpts = ChannelOpts(),
             objectMapper: ObjectMapper = DEFAULT_OBJECT_MAPPER,
-            channelConfigLambda: (NettyChannelBuilder) -> Unit = {}
+            channelConfigLambda: (NettyChannelBuilder) -> Unit = {},
         ): VOClient = PbClient(
             chainId = chainId,
             channelUri = channelUri,

@@ -43,13 +43,13 @@ class DefaultVOExecutor(
     override fun updateValidationDefinition(
         request: ValidationDefinitionUpdateRequest,
         signer: Signer,
-        options: BroadcastOptions
+        options: BroadcastOptions,
     ): BroadcastTxResponse = doExecute(generateMsg(request, signer.address()), signer, options)
 
     override fun deleteValidationDefinition(
         request: ValidationDefinitionDeletionRequest,
         signer: Signer,
-        options: BroadcastOptions
+        options: BroadcastOptions,
     ): BroadcastTxResponse = doExecute(generateMsg(request, signer.address()), signer, options)
 
     override fun createRequestForValidation(
@@ -61,13 +61,13 @@ class DefaultVOExecutor(
     override fun updateRequestForValidation(
         request: ValidationRequestUpdate,
         signer: Signer,
-        options: BroadcastOptions
+        options: BroadcastOptions,
     ): BroadcastTxResponse = doExecute(generateMsg(request, signer.address()), signer, options)
 
     override fun deleteRequestForValidation(
         request: ValidationRequestDeletion,
         signer: Signer,
-        options: BroadcastOptions
+        options: BroadcastOptions,
     ): BroadcastTxResponse = doExecute(generateMsg(request, signer.address()), signer, options)
 
     override fun createEntity(
@@ -79,7 +79,7 @@ class DefaultVOExecutor(
     override fun updateEntity(
         request: EntityUpdateRequest,
         signer: Signer,
-        options: BroadcastOptions
+        options: BroadcastOptions,
     ): BroadcastTxResponse = doExecute(generateMsg(request, signer.address()), signer, options)
 
     /**
@@ -99,7 +99,7 @@ class DefaultVOExecutor(
 
     /**
      * Executes a provided [MsgExecuteContract] with the provided signer information and broadcast mode.
-     * This relies on the interna [PbClient] to do the heavy lifting.
+     * This relies on the internal [PbClient] to do the heavy lifting.
      */
     private fun doExecute(
         msg: MsgExecuteContract,
@@ -120,7 +120,7 @@ class DefaultVOExecutor(
             if (response.txResponse.code != 0) {
                 throw IllegalStateException(
                     "Validation oracle contract execution failed with message:" +
-                        "${System.lineSeparator()}${response.txResponse.rawLog}"
+                        "${System.lineSeparator()}${response.txResponse.rawLog}",
                 )
             }
         }

@@ -1,4 +1,4 @@
-package tech.figure.validationoracle.client.helper
+package tech.figure.validationoracle.client.test
 
 import com.google.protobuf.ByteString
 import io.provenance.scope.util.toByteString

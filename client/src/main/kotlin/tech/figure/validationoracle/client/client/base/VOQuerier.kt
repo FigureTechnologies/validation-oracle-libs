@@ -19,7 +19,7 @@ interface VOQuerier {
      * Retrieves validation request orders currently stored in the smart contract which a given validator is or was
      * allowed to validate.
      */
-    fun queryContractInfo(): ContractInfo? // TODO: Needs to be nullable?
+    fun queryContractInfo(): ContractInfo
 
     /**
      * Retrieves a single validation definition currently stored in the smart contract by its type.

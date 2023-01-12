@@ -5,5 +5,5 @@ package tech.figure.validationoracle.client.domain
  */
 data class NullContractResponseException(
     override val message: String,
-    val t: Throwable? = null
+    val t: Throwable? = null,
 ) : Exception(message, t)
