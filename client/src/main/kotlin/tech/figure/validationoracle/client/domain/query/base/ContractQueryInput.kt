@@ -1,5 +1,6 @@
 package tech.figure.validationoracle.client.domain.query.base
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import tech.figure.validationoracle.client.domain.ContractActionInput
 
 /**
@@ -11,5 +12,6 @@ interface ContractQueryInput : ContractActionInput {
      * Allows the query to define a message when a null response is returned by the contract. Improves client
      * consumer experience with a more readable response upon failure.
      */
+    @get:JsonIgnore
     val queryDescription: String
 }
