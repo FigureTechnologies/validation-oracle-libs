@@ -1,4 +1,4 @@
-val ktlint by configurations.creating
+val ktlint: Configuration by configurations.creating
 
 dependencies {
     ktlint(libs.ktlint)

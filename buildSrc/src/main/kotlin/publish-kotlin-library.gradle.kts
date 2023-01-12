@@ -1,6 +1,4 @@
 import org.gradle.api.publish.maven.MavenPublication
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.net.URI
 
 plugins {
     `maven-publish`
