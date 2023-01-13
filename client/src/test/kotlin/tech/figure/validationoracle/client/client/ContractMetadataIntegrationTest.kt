@@ -5,26 +5,13 @@ import io.kotest.core.spec.Spec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.property.checkAll
-import io.provenance.client.grpc.GasEstimationMethod
-import io.provenance.client.grpc.PbClient
-import tech.figure.validationoracle.client.client.base.ContractIdentifier
-import tech.figure.validationoracle.client.client.base.VOClient
 import tech.figure.validationoracle.client.test.IntegrationTestBase
+import tech.figure.validationoracle.client.test.PrimitiveArbs.anyBech32TestnetAddress
 import tech.figure.validationoracle.client.test.PrimitiveArbs.anyNonEmptyString
-import java.net.URI
 
 @Order(1)
 class ContractMetadataIntegrationTest : IntegrationTestBase({
-    val pbClient = PbClient(
-        chainId = "chain-local",
-        channelUri = URI("http://localhost:9090"),
-        gasEstimationMethod = GasEstimationMethod.MSG_FEE_CALCULATION,
-    )
-    autoClose(pbClient)
-    val voClient = VOClient.getDefault(
-        ContractIdentifier.Name("vo.sc.pb"),
-        pbClient,
-    )
+    val voClient = getVoClient()
     "After initialization, the contract" should {
         "be queryable for basic metadata" {
             voClient.queryContractAddress() shouldNotBe null // TODO: Do regex validation?
@@ -54,7 +41,11 @@ class ContractMetadataIntegrationTest : IntegrationTestBase({
             }
         }
         "have no entities defined yet" {
-            // TODO: Implement
+            checkAll(
+                anyBech32TestnetAddress,
+            ) { randomAddress ->
+                voClient.queryEntityByAddress(randomAddress) shouldBe null
+            }
         }
     }
     "Updating the contract's settings" xshould {
@@ -69,10 +60,6 @@ class ContractMetadataIntegrationTest : IntegrationTestBase({
         }
     }
 }) {
-    override val specTestContainers: List<SpecTestContainer> = listOf(
-        SpecTestContainer.PROVENANCE,
-    )
-
     /**
      * Starts the Docker Compose environment before the start of the first [Spec].
      *

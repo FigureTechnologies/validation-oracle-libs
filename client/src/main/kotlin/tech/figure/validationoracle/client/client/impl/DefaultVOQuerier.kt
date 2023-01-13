@@ -8,9 +8,11 @@ import io.provenance.client.protobuf.extensions.queryWasm
 import tech.figure.validationoracle.client.client.base.VOQuerier
 import tech.figure.validationoracle.client.domain.NullContractResponseException
 import tech.figure.validationoracle.client.domain.model.ContractInfo
+import tech.figure.validationoracle.client.domain.model.EntityDetail
 import tech.figure.validationoracle.client.domain.model.ValidationDefinition
 import tech.figure.validationoracle.client.domain.model.ValidationRequestOrder
 import tech.figure.validationoracle.client.domain.query.ContractInfoQuery
+import tech.figure.validationoracle.client.domain.query.EntityAddressQuery
 import tech.figure.validationoracle.client.domain.query.ValidationDefinitionTypeQuery
 import tech.figure.validationoracle.client.domain.query.ValidationRequestIdQuery
 import tech.figure.validationoracle.client.domain.query.ValidationRequestOwnerQuery
@@ -44,14 +46,18 @@ class DefaultVOQuerier(
         query = ValidationRequestIdQuery(id = id),
     )
 
-    override fun queryValidationRequestsByOwner(ownerAddress: String): List<ValidationRequestOrder>? = doQueryOrNull(
+    override fun queryValidationRequestsByOwner(ownerAddress: String): List<ValidationRequestOrder> = doQuery(
         query = ValidationRequestOwnerQuery(owner = ownerAddress),
     )
 
-    override fun queryValidationRequestsByValidator(validatorAddress: String): List<ValidationRequestOrder>? =
-        doQueryOrNull(
+    override fun queryValidationRequestsByValidator(validatorAddress: String): List<ValidationRequestOrder> =
+        doQuery(
             query = ValidationRequestValidatorQuery(validator = validatorAddress),
         )
+
+    override fun queryEntityByAddress(address: String): EntityDetail? = doQueryOrNull(
+        query = EntityAddressQuery(address = address),
+    )
 
     /**
      * Executes a provided [ContractQueryInput] against the validation oracle smart contract. This relies on the

@@ -1,6 +1,7 @@
 package tech.figure.validationoracle.client.client.base
 
 import tech.figure.validationoracle.client.domain.model.ContractInfo
+import tech.figure.validationoracle.client.domain.model.EntityDetail
 import tech.figure.validationoracle.client.domain.model.ValidationDefinition
 import tech.figure.validationoracle.client.domain.model.ValidationRequestOrder
 
@@ -34,11 +35,13 @@ interface VOQuerier {
     /**
      * Retrieves validation request orders currently stored in the smart contract owned by the given address.
      */
-    fun queryValidationRequestsByOwner(ownerAddress: String): List<ValidationRequestOrder>? // TODO: Needs to be nullable?
+    fun queryValidationRequestsByOwner(ownerAddress: String): List<ValidationRequestOrder>
 
     /**
      * Retrieves validation request orders currently stored in the smart contract which a given validator is or was
      * allowed to validate.
      */
-    fun queryValidationRequestsByValidator(validatorAddress: String): List<ValidationRequestOrder>? // TODO: Needs to be nullable?
+    fun queryValidationRequestsByValidator(validatorAddress: String): List<ValidationRequestOrder>
+
+    fun queryEntityByAddress(address: String): EntityDetail?
 }

@@ -2,6 +2,8 @@ package tech.figure.validationoracle.client.test
 
 import io.kotest.core.extensions.Extension
 import io.kotest.core.spec.style.WordSpec
+import io.provenance.client.grpc.GasEstimationMethod
+import io.provenance.client.grpc.PbClient
 import mu.KLogger
 import mu.KotlinLogging
 import org.testcontainers.containers.Container
@@ -9,7 +11,10 @@ import org.testcontainers.containers.ContainerState
 import org.testcontainers.containers.DockerComposeContainer
 import org.testcontainers.containers.wait.strategy.Wait
 import org.testcontainers.containers.wait.strategy.WaitStrategy
+import tech.figure.validationoracle.client.client.base.ContractIdentifier
+import tech.figure.validationoracle.client.client.base.VOClient
 import java.io.File
+import java.net.URI
 import java.time.Duration
 
 private const val ResourceDirectory = "src/test/resources"
@@ -30,9 +35,9 @@ abstract class IntegrationTestBase(
             /** Images */
             // TODO: Take versions as inputs in GitHub job, and output them in job's output Markdown
             "PROVENANCE_VERSION"         to "v1.13.1",
+            // "SMART_CONTRACT_VERSION_TAG" to "9c3c46cb4d8f188fbcda0a6b93e2d732a4a3a4f3",
             "RUST_OPTIMIZER_VERSION"     to "0.12.11",
             "UBUNTU_VERSION"             to "22.04",
-            /** External ports (currently none needed) */
         )
 
         protected val dockerComposeEnvironmentOverrides: Map<String, String> = emptyMap()
@@ -41,14 +46,32 @@ abstract class IntegrationTestBase(
             KDockerComposeContainer(File("$ResourceDirectory/docker-compose.yml")).apply {
                 withEnv(defaultDockerComposeEnvironment + dockerComposeEnvironmentOverrides)
                 withRemoveImages(DockerComposeContainer.RemoveImages.ALL)
-                withLocalCompose(true) // TODO: Make configurable in GitHub Actions?
+                withLocalCompose(getEnvOr("USE_LOCAL_COMPOSE_FOR_TESTCONTAINERS", "true").toBoolean())
             }
         }
 
-        private fun configurableEnvironment(vararg envVars: Pair<String, String>): Map<String, String> =
-            envVars.associate { (envVar, value) ->
-                envVar to (System.getenv(envVar)?.takeIf { it.isNotBlank() } ?: value)
+        protected fun configurableEnvironment(vararg envVars: Pair<String, String>): Map<String, String> =
+            envVars.associate { (envVar, default) ->
+                envVar to getEnvOr(envVar, default)
             }
+
+        private fun getEnvOr(value: String, default: String) =
+            System.getenv(value)?.takeIf { it.isNotBlank() } ?: default
+
+        @JvmStatic
+        protected fun WordSpec.getPbClient(): PbClient = PbClient(
+            chainId = "chain-local",
+            channelUri = URI("http://localhost:9090"),
+            gasEstimationMethod = GasEstimationMethod.MSG_FEE_CALCULATION,
+        ).also { pbClient ->
+            autoClose(pbClient)
+        }
+
+        @JvmStatic
+        protected fun WordSpec.getVoClient(pbClient: PbClient = getPbClient()): VOClient = VOClient.getDefault(
+            ContractIdentifier.Name("vo.sc.pb"),
+            pbClient,
+        )
     }
 
     enum class SpecTestContainer( // TODO: Possibly change into a sealed class instead
@@ -95,5 +118,5 @@ abstract class IntegrationTestBase(
     /**
      * A list of the containers which are invoked in the test body.
      */
-    protected abstract val specTestContainers: List<SpecTestContainer>
+    protected val specTestContainers: List<SpecTestContainer> = listOf(SpecTestContainer.PROVENANCE)
 }
