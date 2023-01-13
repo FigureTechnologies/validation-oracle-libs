@@ -19,5 +19,5 @@ data class ValidationDefinitionUpdateRequest(
     val currentValidationType: String,
     val newValidationType: String? = null,
     val newDisplayName: String? = null,
-    val enabled: Boolean? = null,
+    val enabled: Boolean? = null, // Defaults should be handled at the smart contract level
 ) : ContractExecuteInput

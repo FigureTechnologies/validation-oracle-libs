@@ -20,11 +20,12 @@ import tech.figure.validationoracle.client.domain.serialization.ValidationDefini
  * requests. If left null, will default to `true`.
  * This parameter can only be changed by the contract owner once initialized.
  * @param bindName Whether to bind the name value creating a validation definition.
+ * If left null, will default to `true`.
  */
 @JsonSerialize(using = ValidationDefinitionCreationRequestSerializer::class)
 data class ValidationDefinitionCreationRequest(
     val validationType: String,
     val displayName: String? = null,
-    val enabled: Boolean? = null, // Let non-null defaults be handled at the smart contract level
-    val bindName: Boolean? = null,
+    val enabled: Boolean? = null, // Defaults should be handled at the smart contract level
+    val bindName: Boolean? = null, // Defaults should be handled at the smart contract level
 ) : ContractExecuteInput

@@ -117,11 +117,9 @@ class DefaultVOExecutor(
             ).let(::listOf),
             mode = options.broadcastMode,
         ).also { response ->
-            if (response.txResponse.code != 0) {
-                throw IllegalStateException(
-                    "Validation oracle contract execution failed with message:" +
-                        "${System.lineSeparator()}${response.txResponse.rawLog}",
-                )
+            check(response.txResponse.code != 0) {
+                "Validation oracle contract execution failed with message:" +
+                    "${System.lineSeparator()}${response.txResponse.rawLog}"
             }
         }
     }

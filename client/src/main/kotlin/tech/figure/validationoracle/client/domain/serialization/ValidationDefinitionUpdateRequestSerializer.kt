@@ -24,15 +24,21 @@ import tech.figure.validationoracle.client.domain.execute.ValidationDefinitionUp
  */
 class ValidationDefinitionUpdateRequestSerializer : JsonSerializer<ValidationDefinitionUpdateRequest>() {
     override fun serialize(value: ValidationDefinitionUpdateRequest, gen: JsonGenerator, provider: SerializerProvider?) {
-        gen.writeStartObject() // Start root node
-        gen.writeObjectFieldStart("update_validation_definition") // Start update_validation_definition node
-        gen.writeObjectFieldStart("request") // Start request node
-        gen.writeStringField("current_validation_type", value.currentValidationType)
-        value.newValidationType?.let { newValidationType -> gen.writeStringField("new_validation_type", newValidationType) }
-        value.newDisplayName?.let { newDisplayName -> gen.writeStringField("new_display_name", newDisplayName) }
-        value.enabled?.let { enabled -> gen.writeBooleanField("enabled", enabled) }
-        gen.writeEndObject() // End request node
-        gen.writeEndObject() // End update_validation_definition node
-        gen.writeEndObject() // End root node
+        SafeJsonGenerator(gen).apply {
+            jsonObject {
+                jsonObject("update_validation_definition") {
+                    jsonObject("request") {
+                        gen.writeStringField("current_validation_type", value.currentValidationType)
+                        value.newValidationType?.let { newValidationType ->
+                            gen.writeStringField("new_validation_type", newValidationType)
+                        }
+                        value.newDisplayName?.let { newDisplayName ->
+                            gen.writeStringField("new_display_name", newDisplayName)
+                        }
+                        value.enabled?.let { enabled -> gen.writeBooleanField("enabled", enabled) }
+                    }
+                }
+            }
+        }
     }
 }

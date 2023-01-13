@@ -12,7 +12,7 @@ import cosmos.base.v1beta1.CoinOuterClass.Coin
  * @param scopes A list of the Provenance scopes, each denoted by its bech32 address, that are expected
  * to be validated in order for this request to be fulfilled.
  * @param allowedValidators An optional list of bech32 addresses corresponding to parties which are
- * permitted to fulfill this request. If omitted, the contract will allow any Provenance
+ * permitted to fulfill this request. If null, the contract will allow any Provenance
  * address to accept the request as a validator.
  * @param quote The quote the requestor is offering in exchange for completion of the request.
  * @param status The status of the validation request.

@@ -24,25 +24,27 @@ import tech.figure.validationoracle.client.domain.execute.ValidationRequest
  */
 class ValidationRequestSerializer : JsonSerializer<ValidationRequest>() {
     override fun serialize(value: ValidationRequest, gen: JsonGenerator, provider: SerializerProvider?) {
-        gen.writeStartObject() // Start root node
-        gen.writeObjectFieldStart("request_validation") // Start request_validation node
-        gen.writeObjectFieldStart("request") // Start request node
-        gen.writeStringField("id", value.id)
-        gen.writeArrayFieldStart("scopes")
-        value.scopes.forEach { scope -> gen.writeObject(scope) } // TODO: Should this use writeString instead?
-        gen.writeEndArray()
-        value.allowedValidators?.let { allowedValidators ->
-            gen.writeArrayFieldStart("allowed_validators")
-            allowedValidators.forEach { allowedValidator ->
-                gen.writeObject(allowedValidator) // TODO: Should this use writeString instead?
+        SafeJsonGenerator(gen).apply {
+            jsonObject {
+                jsonObject("request_validation") {
+                    jsonObject("request") {
+                        gen.writeStringField("id", value.id)
+                        jsonArray("scopes") {
+                            value.scopes.forEach { scope -> gen.writeObject(scope) } // TODO: Should this use writeString instead?
+                        }
+                        value.allowedValidators?.let { allowedValidators ->
+                            jsonArray("allowed_validators") {
+                                allowedValidators.forEach { allowedValidator ->
+                                    gen.writeObject(allowedValidator) // TODO: Should this use writeString instead?
+                                }
+                            }
+                        }
+                        jsonArray("quote") {
+                            value.quote.forEach { coin -> gen.writeObject(coin) } // TODO: Should this use writeString instead?
+                        }
+                    }
+                }
             }
-            gen.writeEndArray()
         }
-        gen.writeArrayFieldStart("quote")
-        value.quote.forEach { coin -> gen.writeObject(coin) } // TODO: Should this use writeString instead?
-        gen.writeEndArray()
-        gen.writeEndObject() // End request node
-        gen.writeEndObject() // End request_validation node
-        gen.writeEndObject() // End root node
     }
 }

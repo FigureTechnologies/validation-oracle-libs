@@ -24,10 +24,12 @@ import tech.figure.validationoracle.client.domain.execute.EntityCreationRequest
  */
 class EntityCreationRequestSerializer : JsonSerializer<EntityCreationRequest>() {
     override fun serialize(value: EntityCreationRequest, gen: JsonGenerator, provider: SerializerProvider?) {
-        gen.writeStartObject() // Start root node
-        gen.writeObjectFieldStart("create_entity") // Start create_entity node
-        gen.writeObjectField("entity", value.entity)
-        gen.writeEndObject() // End create_entity node
-        gen.writeEndObject() // End root node
+        SafeJsonGenerator(gen).apply {
+            jsonObject {
+                jsonObject("create_entity") {
+                    gen.writeObjectField("entity", value.entity)
+                }
+            }
+        }
     }
 }

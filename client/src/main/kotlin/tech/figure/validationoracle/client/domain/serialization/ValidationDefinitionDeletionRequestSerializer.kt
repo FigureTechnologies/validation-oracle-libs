@@ -22,10 +22,12 @@ import tech.figure.validationoracle.client.domain.execute.ValidationDefinitionDe
  */
 class ValidationDefinitionDeletionRequestSerializer : JsonSerializer<ValidationDefinitionDeletionRequest>() {
     override fun serialize(value: ValidationDefinitionDeletionRequest, gen: JsonGenerator, provider: SerializerProvider?) {
-        gen.writeStartObject() // Start root node
-        gen.writeObjectFieldStart("delete_validation_definition") // Start delete_validation_definition node
-        gen.writeStringField("validation_type", value.validationType)
-        gen.writeEndObject() // End delete_validation_definition node
-        gen.writeEndObject() // End root node
+        SafeJsonGenerator(gen).apply {
+            jsonObject {
+                jsonObject("delete_validation_definition") {
+                    gen.writeStringField("validation_type", value.validationType)
+                }
+            }
+        }
     }
 }

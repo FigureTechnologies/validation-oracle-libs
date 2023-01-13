@@ -19,8 +19,8 @@ import tech.figure.validationoracle.client.domain.serialization.ValidationReques
  * @param scopes A list of the Provenance scopes, each denoted by its bech32 address, that are expected to be validated
  * in order for this request to be fulfilled.
  * @param allowedValidators An optional list of bech32 addresses corresponding to the parties which are permitted to
- * fulfill this request.
- * If omitted, the contract will allow any Provenance address to accept the request as a validator.
+ * fulfill this request. If provided, must include at least one address.
+ * If null, the contract will allow any Provenance address to accept the request as a validator.
  * @param quote The quote the requestor is offering in exchange for completion of the request.
  */
 @JsonSerialize(using = ValidationRequestSerializer::class)
