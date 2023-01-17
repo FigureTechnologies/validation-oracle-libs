@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming
 
 /**
  * The address of this entity accompanied by an optional set of fields that define
- *      the entity associated with the validation oracle smart contract.
+ * the entity associated with the validation oracle smart contract.
  *
  * @param address The bech32 address of this entity.
  * @param name A short name describing the entity.

@@ -10,48 +10,83 @@ import io.provenance.client.grpc.Signer
 import io.provenance.client.protobuf.extensions.getBaseAccount
 import io.provenance.client.protobuf.extensions.toAny
 import io.provenance.client.protobuf.extensions.toTxBody
+import tech.figure.validationoracle.client.client.base.BroadcastOptions
 import tech.figure.validationoracle.client.client.base.VOExecutor
 import tech.figure.validationoracle.client.client.base.VOQuerier
-import tech.figure.validationoracle.client.domain.execute.AddValidationDefinitionExecute
-import tech.figure.validationoracle.client.domain.execute.RequestValidationExecute
-import tech.figure.validationoracle.client.domain.execute.base.ContractExecute
+import tech.figure.validationoracle.client.domain.execute.EntityCreationRequest
+import tech.figure.validationoracle.client.domain.execute.EntityUpdateRequest
+import tech.figure.validationoracle.client.domain.execute.ValidationDefinitionCreationRequest
+import tech.figure.validationoracle.client.domain.execute.ValidationDefinitionDeletionRequest
+import tech.figure.validationoracle.client.domain.execute.ValidationDefinitionUpdateRequest
+import tech.figure.validationoracle.client.domain.execute.ValidationRequest
+import tech.figure.validationoracle.client.domain.execute.ValidationRequestDeletion
+import tech.figure.validationoracle.client.domain.execute.ValidationRequestUpdate
+import tech.figure.validationoracle.client.domain.execute.base.ContractExecuteInput
 
 /**
- * The default implementation of an [VOExecutor].  Provides all the standard functionality to use an [VOClient][tech.figure.validationoracle.client.client.base.VOClient] if an
- * override for business logic is not necessary.
+ * The default implementation of an [VOExecutor]. Provides all the standard functionality to use a
+ * [VOClient][tech.figure.validationoracle.client.client.base.VOClient]
+ * if an override for business logic is not necessary.
  */
 class DefaultVOExecutor(
     private val objectMapper: ObjectMapper,
     private val pbClient: PbClient,
     private val querier: VOQuerier,
 ) : VOExecutor {
-    private fun generateAddValidationDefinitionMsg(
-        execute: AddValidationDefinitionExecute,
-        signerAddress: String,
-    ): MsgExecuteContract = generateMsg(execute, signerAddress)
 
-    override fun addValidationDefinition(
-        execute: AddValidationDefinitionExecute,
+    override fun createValidationDefinition(
+        request: ValidationDefinitionCreationRequest,
         signer: Signer,
-        options: tech.figure.validationoracle.client.client.base.BroadcastOptions,
-    ): BroadcastTxResponse = doExecute(generateAddValidationDefinitionMsg(execute, signer.address()), signer, options)
+        options: BroadcastOptions,
+    ): BroadcastTxResponse = doExecute(generateMsg(request, signer.address()), signer, options)
 
-    private fun generateAddValidationDefinitionMsg(
-        execute: RequestValidationExecute,
-        signerAddress: String,
-    ): MsgExecuteContract = generateMsg(execute, signerAddress)
-
-    override fun requestValidationExecute(
-        execute: RequestValidationExecute,
+    override fun updateValidationDefinition(
+        request: ValidationDefinitionUpdateRequest,
         signer: Signer,
-        options: tech.figure.validationoracle.client.client.base.BroadcastOptions,
-    ): BroadcastTxResponse = doExecute(generateAddValidationDefinitionMsg(execute, signer.address()), signer, options)
+        options: BroadcastOptions,
+    ): BroadcastTxResponse = doExecute(generateMsg(request, signer.address()), signer, options)
+
+    override fun deleteValidationDefinition(
+        request: ValidationDefinitionDeletionRequest,
+        signer: Signer,
+        options: BroadcastOptions,
+    ): BroadcastTxResponse = doExecute(generateMsg(request, signer.address()), signer, options)
+
+    override fun createRequestForValidation(
+        request: ValidationRequest,
+        signer: Signer,
+        options: BroadcastOptions,
+    ): BroadcastTxResponse = doExecute(generateMsg(request, signer.address()), signer, options)
+
+    override fun updateRequestForValidation(
+        request: ValidationRequestUpdate,
+        signer: Signer,
+        options: BroadcastOptions,
+    ): BroadcastTxResponse = doExecute(generateMsg(request, signer.address()), signer, options)
+
+    override fun deleteRequestForValidation(
+        request: ValidationRequestDeletion,
+        signer: Signer,
+        options: BroadcastOptions,
+    ): BroadcastTxResponse = doExecute(generateMsg(request, signer.address()), signer, options)
+
+    override fun createEntity(
+        request: EntityCreationRequest,
+        signer: Signer,
+        options: BroadcastOptions,
+    ): BroadcastTxResponse = doExecute(generateMsg(request, signer.address()), signer, options)
+
+    override fun updateEntity(
+        request: EntityUpdateRequest,
+        signer: Signer,
+        options: BroadcastOptions,
+    ): BroadcastTxResponse = doExecute(generateMsg(request, signer.address()), signer, options)
 
     /**
-     * Constructs a generic [MsgExecuteContract] from a provided [ContractExecute] message, ensuring that the provided
-     * address is the signer.
+     * Constructs a generic [MsgExecuteContract] from a provided [ContractExecuteInput] message,
+     * ensuring that the provided address is the signer.
      */
-    private fun <T : ContractExecute> generateMsg(
+    private fun <T : ContractExecuteInput> generateMsg(
         executeMsg: T,
         signerAddress: String,
         funds: CoinOuterClass.Coin? = null,
@@ -63,13 +98,13 @@ class DefaultVOExecutor(
     }.build()
 
     /**
-     * Executes a provided [MsgExecuteContract] with the provided signer information and broadcast mode.  This relies
-     * on the internalized [PbClient] to do the heavy lifting.
+     * Executes a provided [MsgExecuteContract] with the provided signer information and broadcast mode.
+     * This relies on the internal [PbClient] to do the heavy lifting.
      */
     private fun doExecute(
         msg: MsgExecuteContract,
         signer: Signer,
-        options: tech.figure.validationoracle.client.client.base.BroadcastOptions,
+        options: BroadcastOptions,
     ): BroadcastTxResponse {
         val signerAddress = signer.address()
         val account = options.baseAccount ?: pbClient.authClient.getBaseAccount(signerAddress)
@@ -82,8 +117,9 @@ class DefaultVOExecutor(
             ).let(::listOf),
             mode = options.broadcastMode,
         ).also { response ->
-            if (response.txResponse.code != 0) {
-                throw IllegalStateException("Validation oracle contract execution failed with message:${System.lineSeparator()}${response.txResponse.rawLog}")
+            check(response.txResponse.code != 0) {
+                "Validation oracle contract execution failed with message:" +
+                    "${System.lineSeparator()}${response.txResponse.rawLog}"
             }
         }
     }

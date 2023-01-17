@@ -1,0 +1,54 @@
+version: '3.5'
+services:
+  provenance:
+    image: "provenanceio/provenance:${PROVENANCE_VERSION:-v1.13.1}"
+    entrypoint: /scripts/start_provenance_and_store_vo_contract.sh
+    ports:
+      - "26656-26657:26656-26657"
+      - "1317:1317"
+      - "9090:9090"
+    environment:
+      - ID=dev
+      - LOG=${LOG:-provenanced.log}
+      - PIO_HOME=/provenance
+    volumes:
+      - ./scripts:/scripts:ro
+      - validation-oracle-integration-test-setup-volume:/outputs:ro
+      - ./env/seed:/provenance_seed:ro
+      - validation-oracle-integration-test-provenance-volume:/provenance
+      - validation-oracle-integration-test-contract-volume:/code:ro
+    networks:
+      - validation-oracle-integration-test-network
+    depends_on:
+      - smart-contract-optimizer
+  smart-contract-downloader:
+    image: "ubuntu:${UBUNTU_VERSION:-22.04}"
+    entrypoint: /scripts/download_contract.sh
+    environment:
+      - SMART_CONTRACT_VERSION_TAG=${SMART_CONTRACT_VERSION_TAG:-main}
+    volumes:
+      - ./scripts:/scripts
+      - validation-oracle-integration-test-setup-volume:/outputs
+      - validation-oracle-integration-test-contract-volume:/code
+      - validation-oracle-integration-test-cargo-registry-cache:/usr/local/cargo/registry
+  smart-contract-optimizer:
+    image: "cosmwasm/rust-optimizer:${RUST_OPTIMIZER_VERSION:-0.12.11}"
+    entrypoint: /scripts/optimize_contract.sh
+    volumes:
+      - ./scripts:/scripts
+      - validation-oracle-integration-test-setup-volume:/outputs
+      - validation-oracle-integration-test-contract-volume:/code
+      - validation-oracle-integration-test-contract-cache:/code/target
+      - validation-oracle-integration-test-cargo-registry-cache:/usr/local/cargo/registry
+    depends_on:
+      - smart-contract-downloader
+
+networks:
+  validation-oracle-integration-test-network:
+
+volumes:
+  validation-oracle-integration-test-provenance-volume:
+  validation-oracle-integration-test-contract-volume:
+  validation-oracle-integration-test-contract-cache:
+  validation-oracle-integration-test-cargo-registry-cache:
+  validation-oracle-integration-test-setup-volume:

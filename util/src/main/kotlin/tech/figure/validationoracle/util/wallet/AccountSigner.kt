@@ -3,8 +3,6 @@ package tech.figure.validationoracle.util.wallet
 import com.google.protobuf.ByteString
 import cosmos.crypto.secp256k1.Keys
 import io.provenance.client.grpc.Signer
-import io.provenance.hdwallet.ec.PrivateKey
-import io.provenance.hdwallet.ec.PublicKey
 import io.provenance.hdwallet.ec.extensions.toECPrivateKey
 import io.provenance.hdwallet.ec.extensions.toJavaECPrivateKey
 import io.provenance.hdwallet.signer.BCECSigner
@@ -12,6 +10,9 @@ import io.provenance.scope.encryption.util.getAddress
 import io.provenance.scope.encryption.util.toKeyPair
 import io.provenance.scope.util.sha256
 import tech.figure.validationoracle.util.enums.ProvenanceNetworkType
+import io.provenance.hdwallet.ec.PrivateKey as ProvenancePrivateKey
+import io.provenance.hdwallet.ec.PublicKey as ProvenancePublicKey
+import java.security.PrivateKey as JavaPrivateKey
 
 /**
  * A Provenance Signer implementation.  This helper provides multiple ways to derive the signer and eventually boils
@@ -19,8 +20,8 @@ import tech.figure.validationoracle.util.enums.ProvenanceNetworkType
  */
 class AccountSigner(
     private val address: String,
-    private val publicKey: PublicKey,
-    private val privateKey: PrivateKey,
+    private val publicKey: ProvenancePublicKey,
+    private val privateKey: ProvenancePrivateKey,
 ) : Signer {
     override fun address(): String = address
 
@@ -41,12 +42,12 @@ class AccountSigner(
         }
 
         fun fromJavaPrivateKey(
-            privateKey: java.security.PrivateKey,
+            privateKey: JavaPrivateKey,
             mainNet: Boolean,
         ): AccountSigner = fromECPrivateKey(privateKey.toECPrivateKey(), mainNet)
 
         fun fromECPrivateKey(
-            privateKey: PrivateKey,
+            privateKey: ProvenancePrivateKey,
             mainNet: Boolean,
         ): AccountSigner = privateKey.toJavaECPrivateKey().toKeyPair().let { keyPair ->
             AccountSigner(

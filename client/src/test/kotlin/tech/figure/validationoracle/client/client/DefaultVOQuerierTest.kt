@@ -16,12 +16,11 @@ import tech.figure.validationoracle.client.domain.model.EntityDetail
 import tech.figure.validationoracle.client.domain.model.ValidationCost
 import tech.figure.validationoracle.client.domain.model.ValidationDefinition
 import tech.figure.validationoracle.client.domain.model.ValidationRequestOrder
+import tech.figure.validationoracle.client.domain.model.ValidationRequestStatus
 import tech.figure.validationoracle.client.domain.model.ValidatorConfiguration
-import tech.figure.validationoracle.client.domain.query.QueryValidationDefinitionByType
-import tech.figure.validationoracle.client.domain.query.QueryValidationRequestById
-import tech.figure.validationoracle.client.helper.OBJECT_MAPPER
-import tech.figure.validationoracle.client.helper.assertSucceeds
-import tech.figure.validationoracle.client.helper.toJsonPayload
+import tech.figure.validationoracle.client.test.OBJECT_MAPPER
+import tech.figure.validationoracle.client.test.assertSucceeds
+import tech.figure.validationoracle.client.test.toJsonPayload
 import java.math.BigInteger
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -31,7 +30,9 @@ class DefaultVOQuerierTest {
     companion object {
         val TEST_VALIDATION_TYPE = "MyValType"
         val TEST_VALIDATOR_DISPLAY_NAME = "data"
-        val TEST_REQUET_ID = "12345"
+        val TEST_REQUEST_ID = "12345"
+        val TEST_REQUEST_OWNER = "someOwnerAddress"
+        val TEST_TARGET_SCOPE = "someScopeAddress"
     }
 
     @Test
@@ -39,7 +40,7 @@ class DefaultVOQuerierTest {
         val suite = MockSuite.new()
         suite.mockQueryReturns(mockVODefinition())
         val validationDefinitionFromQuery = assertSucceeds("Expected the query to execute successfully when the proper response is returned") {
-            suite.querier.queryValidationDefinitionByType(QueryValidationDefinitionByType(TEST_VALIDATION_TYPE))
+            suite.querier.queryValidationDefinitionByType(TEST_VALIDATION_TYPE)
         }
         assertEquals(TEST_VALIDATOR_DISPLAY_NAME, validationDefinitionFromQuery?.displayName)
         assertEquals(TEST_VALIDATION_TYPE, validationDefinitionFromQuery?.validationType)
@@ -49,20 +50,17 @@ class DefaultVOQuerierTest {
     fun `test queryValidationRequestById`() {
         val suite = MockSuite.new()
         suite.mockQueryNullResponse()
-        assertNull(suite.querier.queryValidationRequestById(QueryValidationRequestById("TestIdNotFound")))
+        assertNull(suite.querier.queryValidationRequestById("TestIdNotFound"))
         suite.mockQueryReturns(mockValidationRequestOrder())
         val validationRequestOrderFromQuery = assertSucceeds("Expected the query to execute successfully when the proper response is returned") {
-            suite.querier.queryValidationRequestById(QueryValidationRequestById(TEST_REQUET_ID))
+            suite.querier.queryValidationRequestById(TEST_REQUEST_ID)
         }
-        assertEquals(TEST_REQUET_ID, validationRequestOrderFromQuery?.id)
+        assertEquals(TEST_REQUEST_ID, validationRequestOrderFromQuery?.id)
     }
 
     fun mockVODefinition(validationType: String = TEST_VALIDATION_TYPE): ValidationDefinition = ValidationDefinition(
         validationType = validationType,
         displayName = TEST_VALIDATOR_DISPLAY_NAME,
-        validators = listOf(
-            mockValidator("Validator1")
-        ),
         enabled = true,
     )
 
@@ -80,14 +78,18 @@ class DefaultVOQuerierTest {
                 amount = BigInteger.valueOf(123),
                 denom = "nhash",
                 destination = mockEntityDetail(),
-            )
+            ),
         ),
         validationType = validationType,
-        validator = mockEntityDetail(),
+        validator = mockEntityDetail().address,
     )
 
-    fun mockValidationRequestOrder(id: String = TEST_REQUET_ID): ValidationRequestOrder = ValidationRequestOrder(
-        id = id
+    fun mockValidationRequestOrder(id: String = TEST_REQUEST_ID): ValidationRequestOrder = ValidationRequestOrder(
+        id = id,
+        owner = TEST_REQUEST_OWNER,
+        scopes = listOf(TEST_TARGET_SCOPE),
+        quote = listOf(),
+        status = ValidationRequestStatus.PENDING,
     )
 
     private data class MockSuite(
@@ -101,7 +103,7 @@ class DefaultVOQuerierTest {
             fun new(contractName: String = DEFAULT_CONTRACT_NAME): MockSuite {
                 val pbClient = mockk<PbClient>()
                 every { pbClient.nameClient.resolve(any()) } returns QueryResolveResponse.newBuilder().setAddress(
-                    DEFAULT_CONTRACT_ADDRESS
+                    DEFAULT_CONTRACT_ADDRESS,
                 ).build()
                 return MockSuite(
                     querier = DefaultVOQuerier(

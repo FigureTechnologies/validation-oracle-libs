@@ -1,31 +1,40 @@
 # Validation Oracle Libs
-This project contains libraries for communicating with the [validation oracle smart contract](https://github.com/FigureTechnologies/validation-oracle-smart-contract)
+This project contains libraries for communicating with the [validation oracle (VO) smart contract](https://github.com/FigureTechnologies/validation-oracle-smart-contract).
 
 ## Status
+[![stability-badge][stability-alpha]][stability-info]
 [![Latest Release][release-badge]][release-latest]
-[![Maven Central][maven-badge]][maven-url]
 [![Apache 2.0 License][license-badge]][license-url]
+
+[![ci-status][ci-status]][ci-workflow]
 [![LOC][loc-badge]][loc-report]
 
-[license-badge]: https://img.shields.io/github/license/FigureTechnologies/validation-oracle-libs.svg
+### Artifacts
+#### Client
+[![Maven Central][client-maven-badge]][client-maven-url]
+#### Utilities
+[![Maven Central][util-maven-badge]][util-maven-url]
+
+[ci-status]: https://github.com/FigureTechnologies/validation-oracle-libs/actions/workflows/build.yaml/badge.svg?branch=main
+[ci-workflow]: https://github.com/FigureTechnologies/validation-oracle-libs/actions/workflows/build.yaml
+[client-maven-badge]: https://maven-badges.herokuapp.com/maven-central/tech.figure.validationoracle/vo-client/badge.svg?style=for-the-badge
+[client-maven-url]: https://maven-badges.herokuapp.com/maven-central/tech.figure.validationoracle/vo-client
+[license-badge]: https://img.shields.io/github/license/FigureTechnologies/validation-oracle-libs.svg?style=for-the-badge
 [license-url]: https://github.com/FigureTechnologies/validation-oracle-libs/blob/main/LICENSE
-[maven-badge]: https://maven-badges.herokuapp.com/maven-central/tech/figure/validationoracle/vo-client/badge.svg
-[maven-url]: https://maven-badges.herokuapp.com/maven-central/tech/figure/validationoracle/vo-client
-[release-badge]: https://img.shields.io/github/tag/FigureTechnologies/validation-oracle-libs.svg
-[release-latest]: https://github.com/FigureTechnologies/validation-oracle-libs/releases/latest
 [loc-badge]: https://tokei.rs/b1/github/FigureTechnologies/validation-oracle-libs
 [loc-report]: https://github.com/FigureTechnologies/validation-oracle-libs
+[release-badge]: https://img.shields.io/github/tag/FigureTechnologies/validation-oracle-libs.svg?style=for-the-badge
+[release-latest]: https://github.com/FigureTechnologies/validation-oracle-libs/releases/latest
+[stability-alpha]: https://img.shields.io/badge/stability-alpha-f4d03f.svg?style=for-the-badge
+[stability-info]: https://github.com/mkenney/software-guides/blob/master/STABILITY-BADGES.md#alpha
+[util-maven-badge]: https://maven-badges.herokuapp.com/maven-central/tech.figure.validationoracle/vo-util/badge.svg?style=for-the-badge
+[util-maven-url]: https://maven-badges.herokuapp.com/maven-central/tech.figure.validationoracle/vo-util
 
 ## Compatibility
 
-The following client/verifier versions should be used with the validation oracle smart contract:
-
-| Client / Verifier | AC Smart Contract |
-|-------------------|-------------------|
-| v1.0.0            | v1.0.0            |
-
-## Importing the Client and/or Verifier
-- The [client](client) library can be downloaded via: `tech.figure.validationoracle:vo-client:<latest-release-version>`
+| [Kotlin Client](https://github.com/FigureTechnologies/validation-oracle-libs/releases) | [VO Smart Contract](https://github.com/FigureTechnologies/validation-oracle-smart-contract/releases) |
+|----------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| TBA                                                                                    | TBA                                                                                                  |
 
 ## Using the VOClient
 ### Creating an VOClient instance
@@ -35,7 +44,7 @@ The `PbClient` comes pre-bundled with the client artifact, when imported.  The `
 instance the application is communicating with, and, importantly, the provenance instance to which the Validation
 Oracle smart contract is deployed.  Then, with the `PbClient` instance, create your `VOClient`.
 
-#### Example:
+#### Example
 
 ```kotlin
 import io.provenance.client.grpc.GasEstimationMethod
@@ -48,7 +57,7 @@ class SampleConfiguration {
   fun buildClients() {
     // First, you'll need a PbClient
     val pbClient = PbClient(
-      // chain-local for local, other some provenance instance chain id
+      // chain-local for a local environment, pio-testnet-1 for the test environment
       chainId = "my-chain-id",
       // http://localhost:9090 for local, or some non-local channel uri
       channelUri = URI("my-channel-uri"),
@@ -64,8 +73,28 @@ class SampleConfiguration {
       contractIdentifier = ContractIdentifier.Name("mycontractname"),
       pbClient = pbClient,
       // This is the default and can be omitted, but it exists for if you'd like to provide your own Jackson ObjectMapper instance
-      objectMapper = ACObjectMapperUtil.OBJECT_MAPPER,
+      objectMapper = VOObjectMapperUtil.OBJECT_MAPPER,
     )
   }
 }
+```
+## Testing
+This repository includes integration tests which tests the library against a Provenance [Docker](https://www.docker.com/) container that has an instantiated VO smart contract.
+By running the Gradle test task, [Testcontainers](https://www.testcontainers.org/) will automatically set up the necessary containers for the tests.
+The tests will need some time to set up, but can be sped up by allocating more CPU and RAM to the Docker environment.
+### Manual Local Environment
+You can manually stand up the integration test environment using
+```shell
+# From the root of this repository
+docker compose -f client/src/test/resources/docker-compose.yml up -d -V --force-recreate
+```
+This command can be supplemented with certain environment variables to override the environment's defaults, e.g.
+```shell
+# From the root of this repository
+RUST_OPTIMIZER_VERSION=0.12.10 docker compose -f client/src/test/resources/docker-compose.yml up -d
+```
+To shut down and reset the environment, run
+```shell
+# From the root of this repository
+docker compose -f client/src/test/resources/docker-compose.yml down -v
 ```

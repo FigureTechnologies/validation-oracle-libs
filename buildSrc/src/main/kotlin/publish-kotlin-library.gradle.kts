@@ -1,6 +1,4 @@
 import org.gradle.api.publish.maven.MavenPublication
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.net.URI
 
 plugins {
     `maven-publish`
@@ -38,7 +36,7 @@ subprojects {
         withJavadocJar()
     }
 
-    // Add an "ac-" prefix to each library's name.  This will prevent jar collisions with other libraries that have
+    // Add a "vo-" prefix to each library's name.  This will prevent jar collisions with other libraries that have
     // ambiguously-named resources like this one, eg: client-1.0.0.jar == bad
     val artifactName = "vo-$name"
     val artifactVersion = projectVersion.toString()

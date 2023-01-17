@@ -1,9 +1,9 @@
 package tech.figure.validationoracle.client.client.base
 
+import tech.figure.validationoracle.client.domain.model.ContractInfo
+import tech.figure.validationoracle.client.domain.model.EntityDetail
 import tech.figure.validationoracle.client.domain.model.ValidationDefinition
 import tech.figure.validationoracle.client.domain.model.ValidationRequestOrder
-import tech.figure.validationoracle.client.domain.query.QueryValidationDefinitionByType
-import tech.figure.validationoracle.client.domain.query.QueryValidationRequestById
 
 /**
  * VOQuerier = Validation Oracle Querier
@@ -17,12 +17,31 @@ interface VOQuerier {
     fun queryContractAddress(): String
 
     /**
-     * Retrieves a single validation definition by type currently stored in the smart contract.
+     * Retrieves validation request orders currently stored in the smart contract which a given validator is or was
+     * allowed to validate.
      */
-    fun queryValidationDefinitionByType(queryValidationDefinitionByType: QueryValidationDefinitionByType): ValidationDefinition?
+    fun queryContractInfo(): ContractInfo
 
     /**
-     * Retrieves all validation request order instances currently available for this smart contract.
+     * Retrieves a single validation definition currently stored in the smart contract by its type.
      */
-    fun queryValidationRequestById(queryValidationRequestOrder: QueryValidationRequestById): ValidationRequestOrder?
+    fun queryValidationDefinitionByType(validationType: String): ValidationDefinition?
+
+    /**
+     * Retrieves a single validation request order currently stored in the smart contract by its ID.
+     */
+    fun queryValidationRequestById(id: String): ValidationRequestOrder?
+
+    /**
+     * Retrieves validation request orders currently stored in the smart contract owned by the given address.
+     */
+    fun queryValidationRequestsByOwner(ownerAddress: String): List<ValidationRequestOrder>
+
+    /**
+     * Retrieves validation request orders currently stored in the smart contract which a given validator is or was
+     * allowed to validate.
+     */
+    fun queryValidationRequestsByValidator(validatorAddress: String): List<ValidationRequestOrder>
+
+    fun queryEntityByAddress(address: String): EntityDetail?
 }

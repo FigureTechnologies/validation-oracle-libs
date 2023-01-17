@@ -4,4 +4,5 @@ configurations.all {
 
 plugins {
     id("publish-kotlin-library")
+    id("org.jetbrains.kotlinx.kover") version "0.6.1"
 }
