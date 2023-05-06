@@ -6,8 +6,8 @@ jackson = "2.14.1"
 jacksonProtobuf = "0.9.13"
 kotest = "5.5.4"
 kotest_extension = "1.1.2"
-kotlin = "1.6.21"
-kotlinCoroutines = "1.6.2"
+kotlin = "1.8.0"
+kotlinCoroutines = "1.6.4"
 kotlinLogging = "3.0.4"
 ktlint = "0.48.1"
 logback = "1.2.6"
@@ -47,7 +47,7 @@ kotest_springExtensions = { module = "io.kotest.extensions:kotest-extensions-spr
 kotlinAllOpen = { module = "org.jetbrains.kotlin:kotlin-allopen", version.ref = "kotlin" }
 kotlinLogging = { module = "io.github.microutils:kotlin-logging-jvm", version.ref = "kotlinLogging" }
 kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
-kotlinStdLibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlinStdLib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlinTest = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
 logbackClassic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
@@ -88,7 +88,7 @@ jackson = [
     "jackson_ParanamerModule",
     "jackson_ProtobufModule"
 ]
-kotlin = ["kotlinAllOpen", "kotlinReflect", "kotlinStdLibJdk8"]
+kotlin = ["kotlinAllOpen", "kotlinReflect", "kotlinStdLib"]
 protobuf = ["protobufJava", "protobufJavaUtil"]
 provenance = ["provenanceGrpcClient", "provenanceHdWallet", "provenanceProto", "provenanceScopeEncryption", "provenanceScopeUtil"]
 scarlet = ["scarletMessageAdapterMoshi", "scarlet", "scarletStreamAdapterCoroutines", "scarletWebSocketOkHttp"]
