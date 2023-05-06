@@ -13,6 +13,7 @@ import io.provenance.client.protobuf.extensions.toTxBody
 import tech.figure.validationoracle.client.client.base.BroadcastOptions
 import tech.figure.validationoracle.client.client.base.VOExecutor
 import tech.figure.validationoracle.client.client.base.VOQuerier
+import tech.figure.validationoracle.client.domain.execute.ContractSettingsUpdate
 import tech.figure.validationoracle.client.domain.execute.EntityCreationRequest
 import tech.figure.validationoracle.client.domain.execute.EntityUpdateRequest
 import tech.figure.validationoracle.client.domain.execute.ValidationDefinitionCreationRequest
@@ -78,6 +79,12 @@ class DefaultVOExecutor(
 
     override fun updateEntity(
         request: EntityUpdateRequest,
+        signer: Signer,
+        options: BroadcastOptions,
+    ): BroadcastTxResponse = doExecute(generateMsg(request, signer.address()), signer, options)
+
+    override fun updateContractSettings(
+        request: ContractSettingsUpdate,
         signer: Signer,
         options: BroadcastOptions,
     ): BroadcastTxResponse = doExecute(generateMsg(request, signer.address()), signer, options)

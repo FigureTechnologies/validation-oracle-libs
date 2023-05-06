@@ -43,5 +43,8 @@ interface VOQuerier {
      */
     fun queryValidationRequestsByValidator(validatorAddress: String): List<ValidationRequestOrder>
 
+    /**
+     * Retrieves information about an entity associated with the smart contract instance by the given address.
+     */
     fun queryEntityByAddress(address: String): EntityDetail?
 }

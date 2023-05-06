@@ -11,6 +11,10 @@ services:
       - ID=dev
       - LOG=${LOG:-provenanced.log}
       - PIO_HOME=/provenance
+      - CONTRACT_ADMIN_MNEMONIC=${CONTRACT_ADMIN_MNEMONIC:-mouse dove lava deputy east toddler long round person margin ecology auto fiber drink put buzz lesson van popular autumn marble flame prepare area}
+      - PARTY1_MNEMONIC=${PARTY1_MNEMONIC:-nature crowd safe rifle amateur vapor dismiss inquiry flag shadow quiz fuel divide donate major fetch leader valve fence across fringe orbit poet evidence}
+      - PARTY2_MNEMONIC=${PARTY2_MNEMONIC:-demise pyramid jelly early draw audit mom name divide dynamic beef way pond fence train spare quality kangaroo vibrant portion distance debris increase acoustic}
+      - PARTY3_MNEMONIC=${PARTY3_MNEMONIC:-exact hidden thought shiver accuse copy supreme umbrella tell tiger during weird region lawn patrol balance lunar wheel much aware grit script dutch sauce}
     volumes:
       - ./scripts:/scripts:ro
       - validation-oracle-integration-test-setup-volume:/outputs:ro

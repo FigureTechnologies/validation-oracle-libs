@@ -18,6 +18,11 @@ on:
         description: Run code coverage
         required: false
         default: true
+      smartContractVersion:
+        type: string
+        description: GitHub tag of the smart contract version to run the tests against
+        required: false
+        default: "main"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -62,6 +67,8 @@ jobs:
           java-version: '11'
 
       - name: Build with Gradle
+        env:
+          SMART_CONTRACT_VERSION_TAG: ${{ github.event.inputs.smartContractVersion }}
         run: ./gradlew clean build --refresh-dependencies -Pversion=$VERSION -x koverReport
 
       - name: Generate code coverage reports
