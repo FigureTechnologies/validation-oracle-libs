@@ -23,10 +23,26 @@ PROVENANCED="/usr/bin/provenanced"
 ### Wait for Provenance to fully stand up, just to be safe
 sleep 5
 
+# TODO: Investigate getting accounts pre-initialized in the seed?
 ### Create an address which will act as the administrator of the smart contract
-$PROVENANCED keys add marketplace-admin --home /provenance --keyring-backend test --testnet --hd-path "44'/1'/0'/0/0" \
-    --output json | jq || exit 1
+echo "$CONTRACT_ADMIN_MNEMONIC" | $PROVENANCED keys add marketplace-admin --home /provenance --keyring-backend test \
+    --testnet --hd-path "44'/1'/0'/0/0" --recover  --output json | jq || exit 1
 ADMIN_ACCOUNT="$($PROVENANCED keys show -a marketplace-admin --home /provenance --keyring-backend test -t)" || exit 1
+
+### Create an address which will act as a participant in the smart contract
+echo "$PARTY1_MNEMONIC" | $PROVENANCED keys add party1 --home /provenance --keyring-backend test \
+    --testnet --hd-path "44'/1'/0'/0/0" --recover  --output json | jq || exit 1
+PARTY1_ACCOUNT="$($PROVENANCED keys show -a party1 --home /provenance --keyring-backend test -t)" || exit 1
+
+### Create an address which will act as another participant in the smart contract
+echo "$PARTY2_MNEMONIC" | $PROVENANCED keys add party2 --home /provenance --keyring-backend test \
+    --testnet --hd-path "44'/1'/0'/0/0" --recover  --output json | jq || exit 1
+PARTY2_ACCOUNT="$($PROVENANCED keys show -a party2 --home /provenance --keyring-backend test -t)" || exit 1
+
+### Create an address which will act as yet another participant in the smart contract
+echo "$PARTY3_MNEMONIC" | $PROVENANCED keys add party3 --home /provenance --keyring-backend test \
+    --testnet --hd-path "44'/1'/0'/0/0" --recover  --output json | jq || exit 1
+PARTY3_ACCOUNT="$($PROVENANCED keys show -a party3 --home /provenance --keyring-backend test -t)" || exit 1
 
 ### Define the address of a validator node in order to fund addresses
 VALIDATOR="$($PROVENANCED keys show -a validator --home /provenance --keyring-backend test -t)" || exit 1
@@ -35,6 +51,57 @@ VALIDATOR="$($PROVENANCED keys show -a validator --home /provenance --keyring-ba
 $PROVENANCED tx bank send \
     "$VALIDATOR" \
     "$ADMIN_ACCOUNT" \
+    350000000000nhash \
+    --from="$VALIDATOR" \
+    --keyring-backend=test \
+    --home=/provenance \
+    --chain-id=chain-local \
+    --gas=auto \
+    --gas-prices="1905nhash" \
+    --gas-adjustment=1.5 \
+    --broadcast-mode=block \
+    --yes \
+    --testnet \
+    --output json | jq || exit 1
+
+### Create the party1 account
+$PROVENANCED tx bank send \
+    "$VALIDATOR" \
+    "$PARTY1_ACCOUNT" \
+    350000000000nhash \
+    --from="$VALIDATOR" \
+    --keyring-backend=test \
+    --home=/provenance \
+    --chain-id=chain-local \
+    --gas=auto \
+    --gas-prices="1905nhash" \
+    --gas-adjustment=1.5 \
+    --broadcast-mode=block \
+    --yes \
+    --testnet \
+    --output json | jq || exit 1
+
+### Create the party2 account
+$PROVENANCED tx bank send \
+    "$VALIDATOR" \
+    "$PARTY2_ACCOUNT" \
+    350000000000nhash \
+    --from="$VALIDATOR" \
+    --keyring-backend=test \
+    --home=/provenance \
+    --chain-id=chain-local \
+    --gas=auto \
+    --gas-prices="1905nhash" \
+    --gas-adjustment=1.5 \
+    --broadcast-mode=block \
+    --yes \
+    --testnet \
+    --output json | jq || exit 1
+
+### Create the party3 account
+$PROVENANCED tx bank send \
+    "$VALIDATOR" \
+    "$PARTY3_ACCOUNT" \
     350000000000nhash \
     --from="$VALIDATOR" \
     --keyring-backend=test \
@@ -120,6 +187,9 @@ fi
 
 ### Export the addresses
 export ADMIN_ACCOUNT
+export PARTY1_ACCOUNT
+export PARTY2_ACCOUNT
+export PARTY3_ACCOUNT
 export VALIDATOR
 export VO_CONTRACT
 

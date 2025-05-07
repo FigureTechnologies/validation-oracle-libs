@@ -2,6 +2,7 @@ package tech.figure.validationoracle.client.client.base
 
 import cosmos.tx.v1beta1.ServiceOuterClass.BroadcastTxResponse
 import io.provenance.client.grpc.Signer
+import tech.figure.validationoracle.client.domain.execute.ContractSettingsUpdate
 import tech.figure.validationoracle.client.domain.execute.EntityCreationRequest
 import tech.figure.validationoracle.client.domain.execute.EntityUpdateRequest
 import tech.figure.validationoracle.client.domain.execute.ValidationDefinitionCreationRequest
@@ -20,7 +21,7 @@ import tech.figure.validationoracle.client.domain.execute.ValidationRequestUpdat
 interface VOExecutor {
     /**
      * Executes the validation oracle smart contract to create a new validation definition to allow a new validation
-     * type to be used in the smart contract instance.
+     * type to be used.
      *
      * @param request The [ValidationDefinitionCreationRequest] payload that will be sent to the smart contract.
      * @param signer Any implementation of [Signer] to sign the message programmatically.
@@ -125,7 +126,7 @@ interface VOExecutor {
     ): BroadcastTxResponse
 
     /**
-     * Executes the validation oracle smart contract to updating an existing entity.
+     * Executes the validation oracle smart contract to update an existing entity.
      *
      * @param request The [EntityUpdateRequest] payload that will be sent to the smart contract.
      * @param signer Any implementation of [Signer] to sign the message programmatically.
@@ -135,6 +136,21 @@ interface VOExecutor {
      */
     fun updateEntity(
         request: EntityUpdateRequest,
+        signer: Signer,
+        options: BroadcastOptions = BroadcastOptions(),
+    ): BroadcastTxResponse
+
+    /**
+     * Executes the validation oracle smart contract to update its settings.
+     *
+     * @param request The [EntityUpdateRequest] payload that will be sent to the smart contract.
+     * @param signer Any implementation of [Signer] to sign the message programmatically.
+     * See [AccountSigner][tech.figure.validationoracle.util.wallet.AccountSigner] for a provided implementation.
+     * @param options Various options that alter how the transaction is broadcast.
+     * See [BroadcastOptions] for more details.
+     */
+    fun updateContractSettings(
+        request: ContractSettingsUpdate,
         signer: Signer,
         options: BroadcastOptions = BroadcastOptions(),
     ): BroadcastTxResponse

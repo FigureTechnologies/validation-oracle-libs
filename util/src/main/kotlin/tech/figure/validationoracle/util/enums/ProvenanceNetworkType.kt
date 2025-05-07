@@ -10,7 +10,7 @@ import io.provenance.hdwallet.hrp.Hrp
  */
 enum class ProvenanceNetworkType(val prefix: String, val hdPath: String) {
     MAINNET(prefix = Hrp.ProvenanceBlockchain.mainnet, hdPath = "m/44'/505'/0'/0/0"),
-    TESTNET(prefix = Hrp.ProvenanceBlockchain.testnet, hdPath = "m/44'/1'/0'/0/0'"),
+    TESTNET(prefix = Hrp.ProvenanceBlockchain.testnet, hdPath = "m/44'/1'/0'/0/0"),
     COSMOS_TESTNET(prefix = Hrp.ProvenanceBlockchain.testnet, hdPath = "m/44'/1'/0'/0/0");
 
     fun toNetworkType(): NetworkType = NetworkType(prefix = prefix, path = hdPath)
